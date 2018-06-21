@@ -486,7 +486,6 @@ public class Plot extends JComponent implements MouseListener, MouseMotionListen
 	int oldWidth = -1;
 	int oldHeight = -1;
 
-	@Override
 	public void mouseClicked(MouseEvent e) {
 
 
@@ -505,7 +504,6 @@ public class Plot extends JComponent implements MouseListener, MouseMotionListen
 
 	}
 
-	@Override
 	public void mousePressed(MouseEvent e) {
 
 		Point p = e.getPoint();
@@ -523,7 +521,6 @@ public class Plot extends JComponent implements MouseListener, MouseMotionListen
 
 	}
 
-	@Override
 	public void mouseReleased(MouseEvent e) {
 
 		inDrag = 0;
@@ -553,19 +550,16 @@ public class Plot extends JComponent implements MouseListener, MouseMotionListen
 
 	}
 
-	@Override
 	public void mouseEntered(MouseEvent e) {
 
 
 	}
 
-	@Override
 	public void mouseExited(MouseEvent e) {
 
 
 	}
 
-	@Override
 	public void mouseDragged(MouseEvent e) {
 
 		Point p = e.getPoint();
@@ -609,7 +603,6 @@ public class Plot extends JComponent implements MouseListener, MouseMotionListen
 
 	}
 
-	@Override
 	public void mouseMoved(MouseEvent e) {
 
 		double[] transfo = transformCoordinatesReverse(e.getX(), e.getY());
@@ -622,7 +615,6 @@ public class Plot extends JComponent implements MouseListener, MouseMotionListen
 	}
 
 
-	@Override
 	public void mouseWheelMoved(MouseWheelEvent e) {
 		
 		int notches = e.getWheelRotation();

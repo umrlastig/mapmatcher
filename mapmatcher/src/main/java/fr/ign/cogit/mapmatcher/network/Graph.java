@@ -47,7 +47,7 @@ public class Graph {
 		public final String name;
 		public double dist = Double.MAX_VALUE; // MAX_VALUE assumed to be infinity
 		public Vertex previous = null;
-		public final Map<Vertex, Double> neighbours = new HashMap<>();
+		public final Map<Vertex, Double> neighbours = new HashMap<Vertex, Double>();
 
 
 
@@ -182,7 +182,7 @@ public class Graph {
 	// Method to build a graph from a set of edges
 	// ----------------------------------------------------------------
 	public Graph(Edge[] edges) {
-		graph = new HashMap<>(edges.length);
+		graph = new HashMap<String, Vertex>(edges.length);
 
 		//one pass to find all vertices
 		for (Edge e : edges) {
@@ -220,7 +220,7 @@ public class Graph {
 		final Vertex source = graph.get(startName);
 		final Vertex target = graph.get(endName);
 
-		NavigableSet<Vertex> q = new TreeSet<>();
+		NavigableSet<Vertex> q = new TreeSet<Vertex>();
 
 		// set-up vertices
 		for (Vertex v : graph.values()) {
@@ -244,7 +244,7 @@ public class Graph {
 
 		final Vertex source = graph.get(startName);
 
-		NavigableSet<Vertex> q = new TreeSet<>();
+		NavigableSet<Vertex> q = new TreeSet<Vertex>();
 
 		// set-up vertices
 		for (Vertex v : graph.values()) {
@@ -325,7 +325,7 @@ public class Graph {
 			return;
 		}
 		final Vertex source = graph.get(startName);
-		NavigableSet<Vertex> q = new TreeSet<>();
+		NavigableSet<Vertex> q = new TreeSet<Vertex>();
 
 		// set-up vertices
 		for (Vertex v : graph.values()) {

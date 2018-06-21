@@ -97,7 +97,6 @@ public class GraphicsFrame extends JFrame {
 		// Grid resolution
 		g5.addActionListener(new ActionListener() {
 
-			@Override
 			public void actionPerformed(ActionEvent e) {
 				g.grid_rx = 5;
 				g.grid_ry = 5;
@@ -123,7 +122,6 @@ public class GraphicsFrame extends JFrame {
 
 		g10.addActionListener(new ActionListener() {
 
-			@Override
 			public void actionPerformed(ActionEvent e) {
 				g.grid_rx = 10;
 				g.grid_ry = 10;
@@ -149,7 +147,6 @@ public class GraphicsFrame extends JFrame {
 
 		g15.addActionListener(new ActionListener() {
 
-			@Override
 			public void actionPerformed(ActionEvent e) {
 				g.grid_rx = 15;
 				g.grid_ry = 15;
@@ -175,7 +172,6 @@ public class GraphicsFrame extends JFrame {
 
 		g20.addActionListener(new ActionListener() {
 
-			@Override
 			public void actionPerformed(ActionEvent e) {
 				g.grid_rx = 20;
 				g.grid_ry = 20;
@@ -201,7 +197,6 @@ public class GraphicsFrame extends JFrame {
 
 		g30.addActionListener(new ActionListener() {
 
-			@Override
 			public void actionPerformed(ActionEvent e) {
 				g.grid_rx = 30;
 				g.grid_ry = 30;
@@ -227,7 +222,6 @@ public class GraphicsFrame extends JFrame {
 
 		g50.addActionListener(new ActionListener() {
 
-			@Override
 			public void actionPerformed(ActionEvent e) {
 				g.grid_rx = 50;
 				g.grid_ry = 50;
@@ -253,7 +247,6 @@ public class GraphicsFrame extends JFrame {
 
 		g100.addActionListener(new ActionListener() {
 
-			@Override
 			public void actionPerformed(ActionEvent e) {
 				g.grid_rx = 100;
 				g.grid_ry = 100;
@@ -280,7 +273,6 @@ public class GraphicsFrame extends JFrame {
 		// Hide/Display network
 		item3.addActionListener(new ActionListener() {
 
-			@Override
 			public void actionPerformed(ActionEvent e) {
 
 				display_network = item3.isSelected();
@@ -301,7 +293,6 @@ public class GraphicsFrame extends JFrame {
 		// Hide/Display raw sequence
 		item4.addActionListener(new ActionListener() {
 
-			@Override
 			public void actionPerformed(ActionEvent e) {
 
 				display_raw_sequence = item4.isSelected();
@@ -322,7 +313,6 @@ public class GraphicsFrame extends JFrame {
 		// Hide/Display map-matched sequence
 		item5.addActionListener(new ActionListener() {
 
-			@Override
 			public void actionPerformed(ActionEvent e) {
 
 				display_mm_sequence = item5.isSelected();
@@ -344,7 +334,6 @@ public class GraphicsFrame extends JFrame {
 		// Hide/Display vectors
 		item6.addActionListener(new ActionListener() {
 
-			@Override
 			public void actionPerformed(ActionEvent e) {
 
 				display_vectors = item6.isSelected();
@@ -365,7 +354,6 @@ public class GraphicsFrame extends JFrame {
 		// Grid visible
 		item7.addActionListener(new ActionListener() {
 
-			@Override
 			public void actionPerformed(ActionEvent e) {
 
 				g.gridVisible = item7.isSelected();
@@ -377,7 +365,6 @@ public class GraphicsFrame extends JFrame {
 		// Coordinates visible
 		item8.addActionListener(new ActionListener() {
 
-			@Override
 			public void actionPerformed(ActionEvent e) {
 
 				g.coordinatesVisible = item8.isSelected();
@@ -389,7 +376,6 @@ public class GraphicsFrame extends JFrame {
 		// Reset
 		item0.addActionListener(new ActionListener() {
 
-			@Override
 			public void actionPerformed(ActionEvent e) {
 
 				g.plot();
@@ -401,7 +387,6 @@ public class GraphicsFrame extends JFrame {
 		// Square
 		item00.addActionListener(new ActionListener() {
 
-			@Override
 			public void actionPerformed(ActionEvent e) {
 
 				square();
@@ -412,7 +397,6 @@ public class GraphicsFrame extends JFrame {
 		// Hide
 		item1.addActionListener(new ActionListener() {
 
-			@Override
 			public void actionPerformed(ActionEvent e) {
 
 				setVisible(false);
@@ -426,7 +410,6 @@ public class GraphicsFrame extends JFrame {
 		// Quit
 		item2.addActionListener(new ActionListener() {
 
-			@Override
 			public void actionPerformed(ActionEvent e) {
 
 				System.exit(0);
@@ -472,24 +455,20 @@ public class GraphicsFrame extends JFrame {
 		
 		addComponentListener(new ComponentListener() {
 		 
-			@Override
 			public void componentResized(ComponentEvent e) {
 
 				square();
 				
 			}
 
-			@Override
 			public void componentMoved(ComponentEvent e) {
 				
 			}
 
-			@Override
 			public void componentShown(ComponentEvent e) {
 			
 			}
 
-			@Override
 			public void componentHidden(ComponentEvent e) {
 			
 			}

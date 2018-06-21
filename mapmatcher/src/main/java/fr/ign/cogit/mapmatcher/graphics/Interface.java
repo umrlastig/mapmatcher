@@ -90,7 +90,7 @@ class CustomSliderUI extends BasicSliderUI {
 		super(b);
 	}
 
-	@Override
+	
 	public void paint(Graphics g, JComponent c) {
 		Graphics2D g2d = (Graphics2D) g;
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, 
@@ -98,12 +98,12 @@ class CustomSliderUI extends BasicSliderUI {
 		super.paint(g, c);
 	}
 
-	@Override
+	
 	protected Dimension getThumbSize() {
 		return new Dimension(12, 16);
 	}
 
-	@Override
+	
 	public void paintTrack(Graphics g) {
 		Graphics2D g2d = (Graphics2D) g;
 		Stroke old = g2d.getStroke();
@@ -119,7 +119,7 @@ class CustomSliderUI extends BasicSliderUI {
 		g2d.setStroke(old);
 	}
 
-	@Override
+	
 	public void paintThumb(Graphics g) {
 		Graphics2D g2d = (Graphics2D) g;
 		int x1 = thumbRect.x + 2;
@@ -265,7 +265,7 @@ public class Interface {
 			@SuppressWarnings("resource")
 			Scanner scan = new Scanner(new File(path));
 
-			String firstLine = scan.nextLine();
+			String firstLine = scan.nextLine().replaceAll("\"", "");
 			StringTokenizer st = new StringTokenizer(firstLine, delimiter);
 
 			while (st.hasMoreTokens()){
@@ -353,9 +353,12 @@ public class Interface {
 			}
 
 		}
-
+		
+		
 		if (CHOICES.contains("id")){choice.setSelectedItem("id");}
-		if (CHOICES.contains("ID")){choice.setSelectedItem("id");}
+		if (CHOICES.contains("ID")){choice.setSelectedItem("ID");}
+		if (CHOICES.contains("link")){choice.setSelectedItem("link");}
+		if (CHOICES.contains("link_id")){choice.setSelectedItem("link_id");}
 
 		if (CHOICES.contains("wkt")){choice_1.setSelectedItem("wkt");}
 		if (CHOICES.contains("WKT")){choice_1.setSelectedItem("WKT");}
@@ -682,6 +685,9 @@ public class Interface {
     }
 	
 
+	
+	
+	
 	/**
 	 * Initialize the contents of the frame.
 	 */
@@ -882,6 +888,7 @@ public class Interface {
 		Label label_11 = new Label("Time stamp format :");
 		label_11.setBounds(25, 335, 124, 22);
 		panel.add(label_11);
+	
 
 		final JComboBox<String> choice_8 = new JComboBox<String>();
 		choice_8.setModel(new DefaultComboBoxModel(new String[] {
@@ -1215,10 +1222,12 @@ public class Interface {
 		textField_18.setBounds(336, 191, 45, 20);
 		panel_2.add(textField_18);
 		
+		
+		
 		// Activate precompute distances option
 		chckbxPrecomputeDistancesOn.addActionListener(new ActionListener() {
 			
-			@Override
+			
 			public void actionPerformed(ActionEvent e) {
 				
 				comboBox_2.setEnabled(chckbxPrecomputeDistancesOn.isSelected());
@@ -1232,7 +1241,7 @@ public class Interface {
 		// Confirm clean output directory
 		chckbxCleanDirectory.addActionListener(new ActionListener() {
 			
-			@Override
+			
 			public void actionPerformed(ActionEvent e) {
 				
 				if (!chckbxCleanDirectory.isSelected()){
@@ -1255,7 +1264,7 @@ public class Interface {
 		
 		// Button to change page section
 		btnPrevious_1.addActionListener(new ActionListener() {
-			@Override
+			
 			public void actionPerformed(ActionEvent e) {
 
 				tabbedPane.setSelectedIndex(1);
@@ -1265,7 +1274,7 @@ public class Interface {
 
 		// Button to change page section
 		btnQuit.addActionListener(new ActionListener() {
-			@Override
+			
 			public void actionPerformed(ActionEvent e) {
 
 				int dialogResult = JOptionPane.showConfirmDialog(null, "Are you sure you want to quit Map Matcher ?", "Quit", JOptionPane.YES_NO_OPTION);
@@ -1281,7 +1290,7 @@ public class Interface {
 
 		// Maximum number of candidates check box
 		chckbxLimitNumberOf.addActionListener(new ActionListener() {
-			@Override
+			
 			public void actionPerformed(ActionEvent e) {
 
 				spinner.setEnabled(chckbxLimitNumberOf.isSelected());
@@ -1292,7 +1301,7 @@ public class Interface {
 		// Autocorrelation check box
 		chckbxSpatiotemporalAutocorrelationBetween.addActionListener(new ActionListener() {
 
-			@Override
+			
 			public void actionPerformed(ActionEvent e) {
 
 				textField_5.setEnabled(chckbxSpatiotemporalAutocorrelationBetween.isSelected());
@@ -1316,7 +1325,7 @@ public class Interface {
 
 		// Maximum speed check box
 		chckbxLimitSpeedBetween.addActionListener(new ActionListener() {
-			@Override
+			
 			public void actionPerformed(ActionEvent e) {
 
 				textField_10.setEnabled(chckbxLimitSpeedBetween.isSelected());
@@ -1327,7 +1336,7 @@ public class Interface {
 		// Maximum speed slider
 		slider.addChangeListener(new ChangeListener() {
 
-			@Override
+			
 			public void stateChanged(ChangeEvent e) {
 
 				String text = "Spatio-temporal autocorrelation between measurements ("+slider.getValue()+" %)";
@@ -1340,7 +1349,7 @@ public class Interface {
 
 		textField_10.addFocusListener(new FocusListener() {
 
-			@Override
+			
 			public void focusLost(FocusEvent e) {
 
 				String text = textField_10.getText();
@@ -1360,7 +1369,7 @@ public class Interface {
 
 			}
 
-			@Override
+			
 			public void focusGained(FocusEvent e) {
 
 			}
@@ -1370,7 +1379,7 @@ public class Interface {
 		// Securities on numerical values
 		textField_7.addFocusListener(new FocusListener() {
 
-			@Override
+			
 			public void focusLost(FocusEvent e) {
 
 				String text = textField_7.getText();
@@ -1388,7 +1397,7 @@ public class Interface {
 
 			}
 
-			@Override
+			
 			public void focusGained(FocusEvent e) {
 
 			}
@@ -1396,7 +1405,7 @@ public class Interface {
 
 		textField_8.addFocusListener(new FocusListener() {
 
-			@Override
+			
 			public void focusLost(FocusEvent e) {
 
 				String text = textField_8.getText();
@@ -1415,7 +1424,7 @@ public class Interface {
 
 			}
 
-			@Override
+			
 			public void focusGained(FocusEvent e) {
 
 			}
@@ -1423,7 +1432,7 @@ public class Interface {
 
 		textField_11.addFocusListener(new FocusListener() {
 
-			@Override
+			
 			public void focusLost(FocusEvent e) {
 
 				String text = textField_11.getText();
@@ -1441,7 +1450,7 @@ public class Interface {
 
 			}
 
-			@Override
+			
 			public void focusGained(FocusEvent e) {
 
 			}
@@ -1449,7 +1458,7 @@ public class Interface {
 		
 		FocusListener radius_comparison_listener = new FocusListener() {
 
-			@Override
+			
 			public void focusLost(FocusEvent e) {
 				
 				double search = Double.parseDouble(textField_8.getText());
@@ -1469,7 +1478,7 @@ public class Interface {
 
 			}
 
-			@Override
+			
 			public void focusGained(FocusEvent e) {
 
 			}
@@ -1483,7 +1492,7 @@ public class Interface {
 
 		btnReset.addActionListener(new ActionListener() {
 
-			@Override
+			
 			public void actionPerformed(ActionEvent e) {
 
 				int dialogResult = JOptionPane.showConfirmDialog(null, "Are you sure you want to reset parameters ?", "Reset", JOptionPane.YES_NO_OPTION);
@@ -1608,7 +1617,7 @@ public class Interface {
 		// Computation
 		// -----------------------------------------------------
 		btnCompute.addActionListener(new ActionListener() {
-			@Override
+			
 			public void actionPerformed(ActionEvent e) {
 				
 				Loaders.setBufferNull();
@@ -1813,7 +1822,7 @@ public class Interface {
 				if (comboBox_1.getSelectedItem().equals(CHOICE_DISTRIBUTIONS[3]))     {Parameters.computation_distribution = Parameters.DISTRIBUTION_RAYLEIGH;}
 
 				if (chckbxLimitNumberOf.isSelected()){
-					Parameters.max_number_candidates = (int) spinner.getValue();
+					Parameters.max_number_candidates = (Integer) spinner.getValue();
 				}
 				else{
 					Parameters.max_number_candidates  = -1;
@@ -2176,7 +2185,93 @@ public class Interface {
 		final JCheckBox chckbxActivateHelp = new JCheckBox("Activate help");
 		chckbxActivateHelp.setBackground(Color.WHITE);
 		chckbxActivateHelp.setBounds(23, 385, 112, 23);
+		chckbxActivateHelp.setSelected(true);
 		panel_3.add(chckbxActivateHelp);
+		
+		textField.setToolTipText("Input network data file path here");
+		btnNewButton.setToolTipText("Browse folders for network data file");
+		btnS.setToolTipText("Set input network file delimiter");
+		button_5.setToolTipText("Display selected network file contents");
+		chckbxNewCheckBox.setToolTipText("Check this box if first line of network file contains column names");
+		chckbxBuildTopology.setToolTipText("Build network graph topology from a set of edges");
+		textField_2.setToolTipText("Set tolerance distance (in m) between nodes to merge");
+		chckbxRemoveDegree.setToolTipText("Remove all nodes of degree 2");
+		choice.setToolTipText("Edge index (string or integer) column name or number");
+		choice_1.setToolTipText("Edge geometry (wkt) column name or number");
+		choice_2.setToolTipText("Edge source (string or integer) column name or number");
+		choice_3.setToolTipText("Edge target (string or integer) column name or number");
+		choice_4.setToolTipText("Column name or number to specify if edge is \"one way\" type (boolean)");
+		textField_1.setToolTipText("Input track data file path(s) here. Use \"*\" to refer to multiple files");
+		button.setToolTipText("Browse folders for track data file");
+		button_2.setToolTipText("Set input track file delimiter");
+		button_1.setToolTipText("Display selected track file contents");
+		checkBox.setToolTipText("Check this box if first line of track file contains column names");
+		textField_3.setToolTipText("Error code to mark sensor or logging failure in track data file (string or integer)");
+		choice_5.setToolTipText("Track record X coordinate (floating point value) column name or number");
+		choice_6.setToolTipText("Track record Y coordinate (floating point value) column name or number");
+		choice_7.setToolTipText("Track record timestamp column name or number (optional)");
+		choice_8.setToolTipText("Timestamp format");
+		textField_4.setToolTipText("Choose output directory for map-matched files");
+		button_3.setToolTipText("Browse to select output directory");
+		button_4.setToolTipText("Set input network file delimiter");
+		chckbxCleanDirectory.setToolTipText("Check for deleting all files in output directory before processing");
+		chckbxKeepSensorError.setToolTipText("Check to keep rows with error code in output file");
+		txtmmdat.setToolTipText("All output map-matched files created will end with this suffix");
+		lblOutputSuffix.setToolTipText("All output map-matched files created will end with this suffix");
+		chckbxPrintReportFile.setToolTipText("Print file summarizing main results of map-matching");
+		chckbxOpenReportFile.setToolTipText("Automatically open report file in notepad after program termination");
+		textField_12.setToolTipText("Input file path for report");
+		button_8.setToolTipText("Browse folders for report file path");
+		chckbxSaveParameters.setToolTipText("Save current parameters with the path specified in the text field below");
+		textField_6.setToolTipText("input path for saving current parameters");
+		button_6.setToolTipText("Browse folders for parameters file");
+		chckbxPrintDebugFiles.setToolTipText("Print additional output files (including QGIS project visualization)");
+		btnReset.setToolTipText("Reset parameters to default value");
+		button_11.setToolTipText("Load a parameter file");
+		btnNext.setToolTipText("Go to output settings tab");
+		btnPrevious.setToolTipText("Go back to input settings tab");
+		button_7.setToolTipText("Go to computation settings tab");
+		btnPrevious_1.setToolTipText("Go back to output settings tab");
+		button_9.setToolTipText("Go back to computation settings tab");
+		btnQuit.setToolTipText("Quit Map Matcher program");
+		button_10.setToolTipText("Quit Map Matcher program");
+		btnCompute.setToolTipText("Launch map matching process");
+		textField_7.setToolTipText("Positional standard deviation (in input coordinates unit)");
+		textField_8.setToolTipText("Set max. positional error (in input coordinates unit) to reduce computation time");
+		textField_11.setToolTipText("Beta transition cost factor");
+		textField_13.setToolTipText("Cost on track-edge angle similarity criteria");
+		chckbxSpatiotemporalAutocorrelationBetween.setToolTipText("Check this box to account for position covariance between successive points");
+		slider.setToolTipText("Correlation between successive points");
+		textField_5.setToolTipText("Autocorrelation variogram scope (in input coordinate units)");
+		chckbxPrecomputeDistancesOn.setToolTipText("Precompute network shortest paths to optimize runnnig time (adviced if the number of tracks to process is big)");
+		chckbxLimitNumberOf.setToolTipText("Set a maximal number of map-matched candidate points to account for at each epoch");
+		spinner.setToolTipText("Set a maximal number of map-matched candidate points to account for at each point");
+		chckbxLimitSpeedBetween.setToolTipText("Set a maximal speed of vehicle between any couple of successive points");
+		chckbxReorganizeLabelsOn.setToolTipText("Apply post processing to minimize the number of link labels");
+		chckbxSkipUnsolvedPoints.setToolTipText("Continue process even when no solution is found for a point. Map-matched output coordinates are set equal to raw input coordinates.");
+		comboBox_1.setToolTipText("Statistical distribution of position errors. ");
+		chckbxSensorObservationsAre.setToolTipText("Check this box to report bias in track coordinates");
+		textField_14.setToolTipText("Track coordinates bias in X direction (in input coordinate units)");
+		textField_15.setToolTipText("Track coordinates bias in Y direction (in input coordinate units)");
+		checkBox_2.setToolTipText("If data are in geographic coordinates (decimal degrees) project data in local metric system");
+		chckbxAllowForNetwork.setToolTipText("Check this box to report geometric inaccuracies in input network");
+		textField_17.setToolTipText("Input network (estimated) root mean square error");
+		chckbxComputeEpochbyepochRmse.setToolTipText("Provide root mean square error of for each point in track sequence");
+		rdbtnNewRadioButton.setToolTipText("Predicted rmse of sensor error inferred from observed map-matching displacment");
+		rdbtnPredicted.setToolTipText("Observed rmse map-matching displacment");
+		textField_9.setToolTipText("Set additional cost to minimize number of edge transition");
+		chckbxComputeEpochbyepochConfidence.setToolTipText("Compute confidence of map-matching solution for each point in track sequence");
+		textField_16.setToolTipText("Map-match only points whose confidence value is above this threshold (0.0 means no filtering)");
+		chckbxRecordMapmatchedPoint.setToolTipText("Output position on edge (curvilinear abscissa) of map-matched points");
+		comboBox.setToolTipText("Select curvilinear abscissa origine point and whether it should be normalized with respect to edge lengths");
+		chckbxStoreMapmatchedPoints.setToolTipText("Create reverse index to store points on each network edge");
+		rdbtnCsv.setToolTipText("Store index on network in Comma Separated Value format");
+		rdbtnXml.setToolTipText("Store index on network in Extensible Markup Language format");
+		chckbxPrintIndexFor.setToolTipText("Keep all edges (even edges without associated track points) in index");
+		chckbxPrintPointsCoordinates.setToolTipText("Output point coordinates in index");
+		chckbxActivateHelp.setToolTipText("Uncheck to hide help tooltip texts");
+		btnHelp.setToolTipText("Open read me file in notepad");
+
 
 
 		// ---------------------------------------------------------------------------------------
@@ -2186,7 +2281,7 @@ public class Interface {
 		// Input network rmse
 		chckbxAllowForNetwork.addActionListener(new ActionListener() {
 			
-			@Override
+			
 			public void actionPerformed(ActionEvent e) {
 
 				label_28.setEnabled(chckbxAllowForNetwork.isSelected());
@@ -2199,7 +2294,7 @@ public class Interface {
 		// Compute rmse at each time step
 		chckbxComputeEpochbyepochRmse.addActionListener(new ActionListener() {
 
-			@Override
+			
 			public void actionPerformed(ActionEvent e) {
 
 				rdbtnPredicted.setEnabled(chckbxComputeEpochbyepochRmse.isSelected());
@@ -2211,7 +2306,7 @@ public class Interface {
 		// Compute rmse after map-matching
 		rdbtnNewRadioButton.addActionListener(new ActionListener() {
 
-			@Override
+			
 			public void actionPerformed(ActionEvent e) {
 
 				if (!rdbtnNewRadioButton.isSelected()){
@@ -2229,7 +2324,7 @@ public class Interface {
 		// Compute rmse before map-matching
 		rdbtnPredicted.addActionListener(new ActionListener() {
 
-			@Override
+			
 			public void actionPerformed(ActionEvent e) {
 
 				if (!rdbtnPredicted.isSelected()){
@@ -2246,7 +2341,7 @@ public class Interface {
 
 		// Input network file chooser
 		btnNewButton.addActionListener(new ActionListener() {
-			@Override
+			
 			public void actionPerformed(ActionEvent e) {
 
 				String folder = "";
@@ -2258,7 +2353,7 @@ public class Interface {
 				}
 
 				JFileChooser filechooser = new JFileChooser(new File(folder)){
-					@Override
+					
 					protected JDialog createDialog( Component parent ) throws HeadlessException {
 						JDialog dialog = super.createDialog( parent );
 						dialog.setIconImage( Main.img.getImage());
@@ -2307,7 +2402,7 @@ public class Interface {
 
 		// Input network file delimiter button
 		btnS.addActionListener(new ActionListener() {
-			@Override
+			
 			public void actionPerformed(ActionEvent e) {
 
 				String output = JOptionPane.showInputDialog("Delimiter for network file: ", Parameters.network_delimiter);
@@ -2326,7 +2421,7 @@ public class Interface {
 
 		// First line contains header check box
 		chckbxNewCheckBox.addActionListener(new ActionListener() {
-			@Override
+			
 			public void actionPerformed(ActionEvent e) {
 
 				fillNetworkComboBoxes();
@@ -2337,7 +2432,7 @@ public class Interface {
 
 		// Build topology check box
 		chckbxBuildTopology.addActionListener(new ActionListener() {
-			@Override
+			
 			public void actionPerformed(ActionEvent e) {
 
 				setListOfOutputs();
@@ -2361,7 +2456,7 @@ public class Interface {
 
 		// Button to change page section
 		btnNext.addActionListener(new ActionListener() {
-			@Override
+			
 			public void actionPerformed(ActionEvent e) {
 
 				tabbedPane.setSelectedIndex(1);
@@ -2371,7 +2466,7 @@ public class Interface {
 
 		// Button to change page section
 		button_7.addActionListener(new ActionListener() {
-			@Override
+			
 			public void actionPerformed(ActionEvent e) {
 
 				tabbedPane.setSelectedIndex(2);
@@ -2381,7 +2476,7 @@ public class Interface {
 
 		// Button to change page section
 		btnPrevious.addActionListener(new ActionListener() {
-			@Override
+			
 			public void actionPerformed(ActionEvent e) {
 
 				tabbedPane.setSelectedIndex(0);
@@ -2391,7 +2486,7 @@ public class Interface {
 
 		// Input network file chooser
 		button.addActionListener(new ActionListener() {
-			@Override
+			
 			public void actionPerformed(ActionEvent e) {
 
 				String folder = "";
@@ -2403,7 +2498,7 @@ public class Interface {
 				}
 
 				JFileChooser filechooser = new JFileChooser(new File(folder)){
-					@Override
+					
 					protected JDialog createDialog( Component parent ) throws HeadlessException {
 						JDialog dialog = super.createDialog( parent );
 						dialog.setIconImage( Main.img.getImage() );
@@ -2429,7 +2524,7 @@ public class Interface {
 
 		// Input tracks file delimiter button
 		button_2.addActionListener(new ActionListener() {
-			@Override
+			
 			public void actionPerformed(ActionEvent e) {
 
 				String output = JOptionPane.showInputDialog("Delimiter for track file: ", Parameters.track_delimiter);
@@ -2447,7 +2542,7 @@ public class Interface {
 
 		// First line contains header check box
 		checkBox.addActionListener(new ActionListener() {
-			@Override
+			
 			public void actionPerformed(ActionEvent e) {
 
 				fillTrackComboBoxes();
@@ -2458,14 +2553,14 @@ public class Interface {
 		// Change path of input track in text field
 		textField_1.addFocusListener(new FocusListener() {
 
-			@Override
+			
 			public void focusLost(FocusEvent e) {
 
 				fillTrackComboBoxes();
 
 			}
 
-			@Override
+			
 			public void focusGained(FocusEvent e) {
 
 			}
@@ -2485,7 +2580,7 @@ public class Interface {
 
 		// Output file chooser
 		button_3.addActionListener(new ActionListener() {
-			@Override
+			
 			public void actionPerformed(ActionEvent e) {
 
 
@@ -2499,7 +2594,7 @@ public class Interface {
 				}
 
 				JFileChooser filechooser = new JFileChooser(new File(folder)){
-					@Override
+					
 					protected JDialog createDialog( Component parent ) throws HeadlessException {
 						JDialog dialog = super.createDialog( parent );
 						dialog.setIconImage( Main.img.getImage() );
@@ -2560,7 +2655,7 @@ public class Interface {
 
 		// Output file delimiter button
 		button_4.addActionListener(new ActionListener() {
-			@Override
+			
 			public void actionPerformed(ActionEvent e) {
 
 				String output = JOptionPane.showInputDialog("Delimiter for output file(s): ", Parameters.output_delimiter);
@@ -2578,7 +2673,7 @@ public class Interface {
 
 		// Output report file check box
 		chckbxPrintReportFile.addActionListener(new ActionListener() {
-			@Override
+			
 			public void actionPerformed(ActionEvent e) {
 
 				chckbxOpenReportFile.setEnabled(chckbxPrintReportFile.isSelected());
@@ -2593,7 +2688,7 @@ public class Interface {
 
 		// Remove degree 2 nodes
 		chckbxRemoveDegree.addActionListener(new ActionListener() {
-			@Override
+			
 			public void actionPerformed(ActionEvent e) {
 
 				setListOfOutputs();
@@ -2605,7 +2700,7 @@ public class Interface {
 
 		// Save parameters check box
 		chckbxSaveParameters.addActionListener(new ActionListener() {
-			@Override
+			
 			public void actionPerformed(ActionEvent e) {
 
 				textField_6.setEnabled(chckbxSaveParameters.isSelected());
@@ -2618,7 +2713,7 @@ public class Interface {
 
 		// Debug files check box
 		chckbxPrintDebugFiles.addActionListener(new ActionListener() {
-			@Override
+			
 			public void actionPerformed(ActionEvent e) {
 
 				lblNumberOfFiles.setText("Number of files to print :  "+computeNumberOfFilesToPrint());
@@ -2630,7 +2725,7 @@ public class Interface {
 
 		// Report file chooser
 		button_8.addActionListener(new ActionListener() {
-			@Override
+			
 			public void actionPerformed(ActionEvent e) {
 
 
@@ -2644,7 +2739,7 @@ public class Interface {
 				}
 
 				JFileChooser filechooser = new JFileChooser(new File(folder)){
-					@Override
+					
 					protected JDialog createDialog( Component parent ) throws HeadlessException {
 						JDialog dialog = super.createDialog( parent );
 						dialog.setIconImage( Main.img.getImage() );
@@ -2669,7 +2764,7 @@ public class Interface {
 
 		// Save parameters file chooser
 		button_6.addActionListener(new ActionListener() {
-			@Override
+			
 			public void actionPerformed(ActionEvent e) {
 
 
@@ -2683,7 +2778,7 @@ public class Interface {
 				}
 
 				JFileChooser filechooser = new JFileChooser(new File(folder)){
-					@Override
+					
 					protected JDialog createDialog( Component parent ) throws HeadlessException {
 						JDialog dialog = super.createDialog( parent );
 						dialog.setIconImage( Main.img.getImage() );
@@ -2709,14 +2804,14 @@ public class Interface {
 		// Edit list of files to print
 		FocusListener fl = new FocusListener() {
 
-			@Override
+			
 			public void focusLost(FocusEvent e) {
 
 				setListOfOutputs();
 
 			}
 
-			@Override
+			
 			public void focusGained(FocusEvent e) {
 
 			}
@@ -2729,7 +2824,7 @@ public class Interface {
 		txtmmdat.getDocument().addDocumentListener(new DocumentListener() {
 
 
-			@Override
+			
 			public void removeUpdate(DocumentEvent e) {
 
 				if (Parameters.input_track_path_list == null){
@@ -2746,7 +2841,7 @@ public class Interface {
 
 			}
 
-			@Override
+			
 			public void insertUpdate(DocumentEvent e) {
 
 				if (Parameters.input_track_path_list == null){
@@ -2760,7 +2855,7 @@ public class Interface {
 				}
 			}
 
-			@Override
+			
 			public void changedUpdate(DocumentEvent e) {
 
 				if (Parameters.input_track_path_list == null){
@@ -2777,7 +2872,7 @@ public class Interface {
 
 		button_5.addActionListener(new ActionListener() {
 
-			@Override
+			
 			public void actionPerformed(ActionEvent e) {
 				
 				visualize(textField.getText(), "Network input file");
@@ -2788,17 +2883,17 @@ public class Interface {
 
 		button_1.addActionListener(new ActionListener() {
 
-			@Override
+			
 			public void actionPerformed(ActionEvent e) {
 
-				visualize(textField_1.getText(), "Track input file");
+				visualize(Parameters.input_track_path_list.get(0), "Track input file");
 
 			}
 		});
 
 		btnHelp.addActionListener(new ActionListener() {
 
-			@Override
+			
 			public void actionPerformed(ActionEvent e) {
 
 				File readme = new File("readme.txt");
@@ -2826,18 +2921,19 @@ public class Interface {
 
 		chckbxRecordMapmatchedPoint.addActionListener(new ActionListener() {
 
-			@Override
+			
 			public void actionPerformed(ActionEvent e) {
 
 				comboBox.setEnabled(chckbxRecordMapmatchedPoint.isSelected());
 
 			}
 		});
+		
 
 		// Help
 		chckbxActivateHelp.addActionListener(new ActionListener() {
 
-			@Override
+			
 			public void actionPerformed(ActionEvent e) {
 
 				if (chckbxActivateHelp.isSelected()){
@@ -3020,11 +3116,12 @@ public class Interface {
 			}
 
 		});
+		
 
 		// Sensor is biased
 		chckbxSensorObservationsAre.addActionListener(new ActionListener() {
 
-			@Override
+			
 			public void actionPerformed(ActionEvent e) {
 
 				label_18.setEnabled(chckbxSensorObservationsAre.isSelected());
@@ -3041,7 +3138,7 @@ public class Interface {
 
 		button_9.addActionListener(new ActionListener() {
 
-			@Override
+			
 			public void actionPerformed(ActionEvent e) {
 
 				tabbedPane.setSelectedIndex(2);
@@ -3051,7 +3148,7 @@ public class Interface {
 
 		button_10.addActionListener(new ActionListener() {
 
-			@Override
+			
 			public void actionPerformed(ActionEvent e) {
 
 				int dialogResult = JOptionPane.showConfirmDialog(null, "Are you sure you want to quit Map Matcher ?", "Quit", JOptionPane.YES_NO_OPTION);
@@ -3068,7 +3165,7 @@ public class Interface {
 
 		chckbxComputeEpochbyepochConfidence.addActionListener(new ActionListener() {
 
-			@Override
+			
 			public void actionPerformed(ActionEvent e) {
 
 				if (chckbxComputeEpochbyepochConfidence.isSelected()){
@@ -3099,7 +3196,7 @@ public class Interface {
 		// Save index
 		chckbxStoreMapmatchedPoints.addActionListener(new ActionListener() {
 
-			@Override
+			
 			public void actionPerformed(ActionEvent e) {
 
 				setListOfOutputs();
@@ -3118,7 +3215,7 @@ public class Interface {
 		// Save index in CSV
 		rdbtnCsv.addActionListener(new ActionListener() {
 
-			@Override
+			
 			public void actionPerformed(ActionEvent e) {
 
 				if (!rdbtnCsv.isSelected()){
@@ -3137,7 +3234,7 @@ public class Interface {
 		// Save index in XML
 		rdbtnXml.addActionListener(new ActionListener() {
 
-			@Override
+			
 			public void actionPerformed(ActionEvent e) {
 
 				if (!rdbtnXml.isSelected()){
@@ -3155,7 +3252,7 @@ public class Interface {
 
 		button_11.addActionListener(new ActionListener() {
 
-			@Override
+			
 			public void actionPerformed(ActionEvent e) {
 
 				String folder = "";
@@ -3168,7 +3265,7 @@ public class Interface {
 				}
 
 				JFileChooser filechooser = new JFileChooser(new File(folder)){
-					@Override
+					
 					protected JDialog createDialog( Component parent ) throws HeadlessException {
 						JDialog dialog = super.createDialog( parent );
 						dialog.setIconImage( Main.img.getImage() );
@@ -3366,7 +3463,7 @@ public class Interface {
 
 			}
 		});
-
+		
 
 	}
 

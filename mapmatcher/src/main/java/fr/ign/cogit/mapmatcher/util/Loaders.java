@@ -497,6 +497,7 @@ public class Loaders {
 			int counter = 1;
 
 			line = scan.nextLine();
+			line = line.replaceAll("\"", "");
 
 			st = new StringTokenizer(line, columns_delimiter_network);
 
@@ -504,17 +505,18 @@ public class Loaders {
 
 				String col_name = st.nextToken();
 
-				if (col_name.equals("\"" + geom_column_name + "\""))   {wkt_id = counter;}
-				if (col_name.equals("\"" + source_column_name + "\"")) {source_id = counter;}
-				if (col_name.equals("\"" + target_column_name + "\"")) {target_id = counter;}
-				if (col_name.equals("\"" + edge_column_name + "\""))   {edge_id = counter;}
-				if (col_name.equals("\"" + oneway_column_name + "\"")) {oneway_id = counter;}
+				if (col_name.equals(geom_column_name))   {wkt_id = counter;}
+				if (col_name.equals(source_column_name)) {source_id = counter;}
+				if (col_name.equals(target_column_name)) {target_id = counter;}
+				if (col_name.equals(edge_column_name))   {edge_id = counter;}
+				if (col_name.equals(oneway_column_name)) {oneway_id = counter;}
 
 
 				counter ++;
-
+				
 			}
-
+			
+		
 
 			if (wkt_id == -1){
 
