@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans>
+
+    <!-- ========================================================================== -->
+    <!-- 	The PPIO -->
+    <!-- ========================================================================== -->
+    <bean id="ParamMatchingPPIO" class="fr.ign.cogit.process.mapmatcher.ppio.ParamMatchingPPIO" />
+    <bean id="TrackPPIO"         class="fr.ign.cogit.process.mapmatcher.ppio.TrackPPIO" />
+    <bean id="ResultPPIO"        class="fr.ign.cogit.process.mapmatcher.ppio.ResultPPIO" />
+
+</beans>
