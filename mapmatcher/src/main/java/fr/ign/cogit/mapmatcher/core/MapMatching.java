@@ -1,5 +1,5 @@
 /*******************************************************************************
- * This software is released under the licence CeCILL
+ * This software is released under the license CeCILL
  * 
  * see Licence_CeCILL-C_fr.html see Licence_CeCILL-C_en.html
  * 
@@ -121,8 +121,8 @@ public class MapMatching {
 		MapMatching.parameterize();
 		
 		if (Parameters.graphical_output){
-
-			 Main.gui.graphics.setNetwork(Loaders.loadNetwork(Parameters.input_network_path));
+			
+			Main.gui.graphics.setNetwork(Loaders.loadNetwork(Parameters.input_network_path));
 
 		}
 

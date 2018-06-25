@@ -1,5 +1,5 @@
 /*******************************************************************************
- * This software is released under the licence CeCILL
+ * This software is released under the license CeCILL
  * 
  * see Licence_CeCILL-C_fr.html see Licence_CeCILL-C_en.html
  * 

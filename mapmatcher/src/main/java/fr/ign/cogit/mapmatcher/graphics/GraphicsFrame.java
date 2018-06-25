@@ -533,6 +533,4 @@ public class GraphicsFrame extends JFrame {
 		
 	}
 
-
-
 }

@@ -41,6 +41,8 @@ import java.awt.geom.GeneralPath;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -267,6 +269,8 @@ public class Interface {
 	private JTextField textField_18;
 
 	private boolean helpMultipleTrackPaths = true; 
+	
+	private String web_link = "https://github.com/IGNF/mapmatcher";
 
 
 
@@ -708,7 +712,9 @@ public class Interface {
 	 */
 	public synchronized void dragAndDrop(DropTargetDropEvent evt, JTextField tf) {
 
-		removeHelpText();
+		if (tf.getText().startsWith("Use *")){
+			removeHelpText();
+		}
 
 		try {
 			evt.acceptDrop(DnDConstants.ACTION_COPY);
@@ -716,11 +722,34 @@ public class Interface {
 			List<File> droppedFiles = (List<File>) evt
 			.getTransferable().getTransferData(
 					DataFlavor.javaFileListFlavor);
-			for (File file : droppedFiles) {
 
-				tf.setText(file.getAbsolutePath());
+			String paths = "";
+
+			if (tf == textField_1) {
+
+				for (int i=0; i<droppedFiles.size(); i++) {
+
+					File file = droppedFiles.get(i);
+					paths = paths+file.getAbsolutePath();
+
+					if (i != droppedFiles.size()-1){
+
+						paths = paths + ";";
+
+					}
+
+				}
+
+			}else {
+
+				paths = droppedFiles.get(0).getAbsolutePath();
 
 			}
+
+			tf.setText(paths);
+
+
+
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
@@ -1002,6 +1031,8 @@ public class Interface {
 			public synchronized void drop(DropTargetDropEvent evt) {
 
 				dragAndDrop(evt, textField_4);
+
+				setListOfOutputs();
 
 			}
 
@@ -1650,7 +1681,7 @@ public class Interface {
 
 				addHelpText();
 				helpMultipleTrackPaths = true;
-				
+
 				// Reset Parameters class
 				Parameters.reset();
 
@@ -2526,7 +2557,7 @@ public class Interface {
 			public void focusGained(FocusEvent e) {
 
 				removeHelpText();
-				
+
 			}
 		});
 
@@ -2869,27 +2900,40 @@ public class Interface {
 
 			public void actionPerformed(ActionEvent e) {
 
-				File readme = new File("readme.txt");
+				if (Desktop.isDesktopSupported()) {
+					try {
+						Desktop.getDesktop().browse(new URI(web_link));
+					} catch (IOException | URISyntaxException e1) {
+						e1.printStackTrace();
+					}
+				}else {
 
-				if (!readme.exists()) {
+					File readme = new File("readme.txt");
 
-					JOptionPane.showMessageDialog(null, "Warning: cannot find readme file", "Warning", JOptionPane.WARNING_MESSAGE);
+					if (!readme.exists()) {
 
-					return;
+						JOptionPane.showMessageDialog(null, "Warning: cannot find readme file", "Warning", JOptionPane.WARNING_MESSAGE);
 
-				}
+						return;
 
-				try {
+					}
 
-					Desktop.getDesktop().edit(readme);
 
-				} catch (IOException ex) {
 
-					JOptionPane.showMessageDialog(null, "Warning: cannot open readme file", "Warning", JOptionPane.WARNING_MESSAGE);
+					try {
+
+						Desktop.getDesktop().edit(readme);
+
+					} catch (IOException ex) {
+
+						JOptionPane.showMessageDialog(null, "Warning: cannot open readme file", "Warning", JOptionPane.WARNING_MESSAGE);
+
+					}
 
 				}
 
 			}
+			
 		});
 
 		chckbxRecordMapmatchedPoint.addActionListener(new ActionListener() {
@@ -3080,7 +3124,7 @@ public class Interface {
 
 				}
 				else{
-					
+
 					removeHelpText();
 					Parameters.load(filechooser.getSelectedFile().getAbsolutePath());
 
@@ -3115,7 +3159,7 @@ public class Interface {
 					chckbxSaveParameters.setSelected(Parameters.output_parameters);
 					chckbxPrintDebugFiles.setSelected(Parameters.output_debug);
 					checkBox_2.setSelected(Parameters.project_coordinates);
-					
+
 					textField_6.setEnabled(chckbxSaveParameters.isSelected());
 					button_6.setEnabled(chckbxSaveParameters.isSelected());
 
@@ -3270,21 +3314,21 @@ public class Interface {
 
 	}
 
-	
+
 	private void addHelpText(){
-		
+
 		textField_1.setText("Use * to refer to multiple track data files");
 		textField_1.setForeground(Color.GRAY);
 		Font myFont = new Font("Segoe UI", Font.ITALIC, 12);
 		textField_1.setFont(myFont);
 
-		
+
 	}
-	
+
 	private void removeHelpText(){
-		
+
 		if (helpMultipleTrackPaths){
-			
+
 			textField_1.setText("");
 			textField_1.setForeground(Color.BLACK);
 
@@ -3292,11 +3336,11 @@ public class Interface {
 			textField_1.setFont(myFont);
 
 			helpMultipleTrackPaths = false;
-			
+
 		}
-		
+
 	}
-	
+
 
 	private void setToolTips(boolean activate){
 
@@ -3336,7 +3380,7 @@ public class Interface {
 			chckbxOpenReportFile.setToolTipText("Automatically open report file in notepad after program termination");
 			textField_12.setToolTipText("Input file path for report");
 			button_8.setToolTipText("Browse folders for report file path");
-			chckbxSaveParameters.setToolTipText("Save current parameters with the path specified in the text field below");
+			chckbxSaveParameters.setToolTipText("Save parameters in the path specified below");
 			textField_6.setToolTipText("input path for saving current parameters");
 			button_6.setToolTipText("Browse folders for parameters file");
 			chckbxPrintDebugFiles.setToolTipText("Print additional output files (including QGIS project visualization)");

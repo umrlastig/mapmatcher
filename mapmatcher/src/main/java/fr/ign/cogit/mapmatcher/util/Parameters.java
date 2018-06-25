@@ -31,7 +31,7 @@ import fr.ign.cogit.mapmatcher.core.MapMatching;
 //------------------------------------------------
 
 public class Parameters {
-	
+
 	// Distributions
 	public static int DISTRIBUTION_UNIFORM = 2;
 	public static int DISTRIBUTION_EXPONENTIAL = 3;
@@ -92,19 +92,19 @@ public class Parameters {
 	public static double computation_autocorrelation = 0.0;
 	public static double computation_scope = 100;
 	public static double computation_angle = 0.0;
-	
+
 	public static double bias_x = 0.0;
 	public static double bias_y = 0.0;
 	public static double network_rmse = 0.0;
 	public static double confidence_ratio = 1.0;
-	
+
 	public static double computation_speed_limit = Double.MAX_VALUE;
 
 	// Computation options
 	public static boolean sort_nodes = false;
 	public static boolean failure_skip = false;
 	public static boolean make_topology = false;
-	
+
 	public static int max_number_candidates = -1;
 	public static double topo_tolerance = 0.01;
 	public static double buffer_radius = 300.0;
@@ -118,7 +118,7 @@ public class Parameters {
 	public static boolean index_format_csv = true;
 	public static boolean network_inaccuracies = false;
 	public static boolean confidence_min_ratio = false;
-	
+
 	public static boolean output_mute = false;
 	public static boolean output_errors = true;
 	public static boolean output_clear = false;
@@ -126,16 +126,16 @@ public class Parameters {
 	public static boolean output_confidence = false;
 	public static boolean output_index_all_edge = false;
 	public static boolean output_index_coords = false;
-	
+
 	public static boolean graphical_output = false;
-	
+
 	public static String gui_report_path = "";
 	public static String gui_parameters_path = "";
-	
+
 	public static String abs_curv_type = "from_source_m";
 	public static String distance_buffer = "full_network";
-	
-	
+
+
 	// List of input files
 	public static ArrayList<String> input_track_path_list;
 
@@ -226,7 +226,6 @@ public class Parameters {
 			if (name.equals("output.debug"))           {output_debug = Boolean.parseBoolean(value);}
 			if (name.equals("output.clear"))           {output_clear = Boolean.parseBoolean(value);}
 			if (name.equals("output.report"))          {output_report = Boolean.parseBoolean(value);}
-			if (name.equals("output.parameters"))      {output_parameters = Boolean.parseBoolean(value);}
 			if (name.equals("output.mute"))            {output_mute = Boolean.parseBoolean(value);}
 			if (name.equals("output.errors"))          {output_errors = Boolean.parseBoolean(value);}
 			if (name.equals("output.rmse"))     	   {output_rmse = Boolean.parseBoolean(value);}
@@ -268,14 +267,14 @@ public class Parameters {
 			if (name.equals("computation.autocorrelation"))   {computation_autocorrelation = Double.parseDouble(value);}
 			if (name.equals("computation.scope"))             {computation_scope = Double.parseDouble(value);}
 			if (name.equals("computation.angle"))             {computation_angle = Double.parseDouble(value);}
-			 
+
 			if (name.equals("computation.distribution"))	  {
-				
+
 				if (value.equals("uniform"))     {computation_distribution = Parameters.DISTRIBUTION_UNIFORM;}
 				if (value.equals("exponential")) {computation_distribution = Parameters.DISTRIBUTION_EXPONENTIAL;}
 				if (value.equals("normal"))      {computation_distribution = Parameters.DISTRIBUTION_NORMAL;}
 				if (value.equals("rayleigh"))    {computation_distribution = Parameters.DISTRIBUTION_RAYLEIGH;}
-				
+
 			}
 
 			if (name.equals("option.max.candidates"))         {max_number_candidates = Integer.parseInt(value);}
@@ -289,29 +288,29 @@ public class Parameters {
 			if (name.equals("option.ref.network"))			  {ref_to_network = Boolean.parseBoolean(value);}
 			if (name.equals("output.index.all.edge"))	      {output_index_all_edge =  Boolean.parseBoolean(value);}
 			if (name.equals("output.index.coords"))	          {output_index_coords =  Boolean.parseBoolean(value);}
-			
+
 			if (name.equals("option.rmse.type"))			  {rmse_type_before = value.equals("before");}
 			if (name.equals("output.index.format"))			  {index_format_csv = value.equals("csv");}
-			
+
 			if (name.equals("option.buffer.type"))		      {distance_buffer = value;}
-			
+
 			if (name.equals("topology.tolerance"))            {topo_tolerance = Double.parseDouble(value);}
 			if (name.equals("confidence.ratio"))              {confidence_ratio = Double.parseDouble(value);}
-			
+
 			if (name.equals("network.inaccuracies"))          {network_inaccuracies = Boolean.parseBoolean(value);}
-			
+
 			if (name.equals("bias.x"))						  {bias_x = Double.parseDouble(value);}
 			if (name.equals("bias.y"))						  {bias_y = Double.parseDouble(value);}
 			if (name.equals("network.rmse"))				  {network_rmse = Double.parseDouble(value);}
 			if (name.equals("option.buffer.radius"))		  {buffer_radius = Double.parseDouble(value);}
-			
+
 			if (name.equals("output.abs.type"))				  {abs_curv_type = value;}
-			
+
 			if (name.equals("output.graphics"))				  {graphical_output = Boolean.parseBoolean(value);}
-			
-			              
+
+
 		}
-		
+
 
 		// Corrections
 		input_network_path = input_network_path.replaceAll("(^ )|( $)", "");
@@ -405,7 +404,7 @@ public class Parameters {
 				error = true;
 
 			}
-			
+
 			if (network_oneway_id != -1){
 
 				Tools.println("Error: network.oneway.id cannot be defined when network.header = true");
@@ -444,7 +443,7 @@ public class Parameters {
 				error = true;
 
 			}
-			
+
 			if (!network_oneway_name.equals("")){
 
 				Tools.println("Error: network.oneway.name cannot be defined when network.header = false");
@@ -471,9 +470,9 @@ public class Parameters {
 
 		}
 
-
+		
 		// List output
-		if (!input_track_path.contains("*")){
+		if ((!input_track_path.contains("*")) && (!input_track_path.contains(";"))){
 
 			input_track_path_list.add(input_track_path);
 
@@ -482,52 +481,83 @@ public class Parameters {
 
 			readMultipleFiles();
 			
+			input_track_path = "";
+			
+			for (int i=0; i<input_track_path_list.size(); i++) {	
+				input_track_path = input_track_path+input_track_path_list.get(i);
+				if (i != input_track_path_list.size()-1) {
+					input_track_path = input_track_path+";";
+				}
+			}
+
 		}
 
 	}
-	
-	
+
+
 	// Module to analyze regular expression
 	public static void readMultipleFiles(){
-		
+
 		input_track_path_list = new ArrayList<String>();
-		
-		input_track_path = input_track_path.replace("\\", "/");
 
-		StringTokenizer st = new StringTokenizer(input_track_path, "/");
+		ArrayList<String> input_track_path_list_prelim = new ArrayList<String>();
 
-		ArrayList<String> items = new ArrayList<String>();
+		if (input_track_path.contains(";")) {
 
-		while(st.hasMoreTokens()){
+			StringTokenizer st = new StringTokenizer(input_track_path, ";");
 
-			items.add(st.nextToken());
+			while (st.hasMoreTokens()) {
+
+				input_track_path_list_prelim.add(st.nextToken());
+
+			}
+
+		}
+		else {
+
+			input_track_path_list_prelim.add(input_track_path);
 
 		}
 
-		String folder = "";
+		for (int j=0; j<input_track_path_list_prelim.size(); j++) {
 
-		for (int i=0; i<items.size()-1; i++){
+			input_track_path = input_track_path_list_prelim.get(j).replace("\\", "/");
 
-			folder += items.get(i)+"/";
+			StringTokenizer st = new StringTokenizer(input_track_path, "/");
 
-		}
+			ArrayList<String> items = new ArrayList<String>();
 
-		File[] listOfFiles = (new File(folder)).listFiles();
-		
+			while(st.hasMoreTokens()){
 
-		for (int i=0; i<listOfFiles.length; i++){
+				items.add(st.nextToken());
 
-			String file_path = listOfFiles[i].getPath().replace("\\", "/");
+			}
 
-			if(file_path.matches(input_track_path.replace("*", ".*"))){
+			String folder = "";
 
-				input_track_path_list.add(file_path);
+			for (int i=0; i<items.size()-1; i++){
+
+				folder += items.get(i)+"/";
+
+			}
+
+			File[] listOfFiles = (new File(folder)).listFiles();
+
+
+			for (int i=0; i<listOfFiles.length; i++){
+
+				String file_path = listOfFiles[i].getPath().replace("\\", "/");
+
+				if(file_path.matches(input_track_path.replace("*", ".*"))){
+
+					input_track_path_list.add(file_path);
+
+				}
 
 			}
 
 		}
 
-		
 	}
 
 	// Module to print parameters
@@ -536,11 +566,11 @@ public class Parameters {
 		PrintWriter writer_param = null;
 
 		String path = output_path+"/parameters.txt";
-		
+
 		if (MapMatching.gui_mode){
-			
+
 			path = Parameters.gui_parameters_path;
-			
+
 		}
 
 		File file_param = new File(path);
@@ -559,7 +589,7 @@ public class Parameters {
 		try {
 
 			writer_param = new PrintWriter(file_param);
-			
+
 			Date date = new Date();
 			DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 
@@ -622,8 +652,8 @@ public class Parameters {
 			writer_param.write("computation.autocorrelation = "+computation_autocorrelation+"\r\n");
 			writer_param.write("computation.scope = "+computation_scope+"\r\n");
 			writer_param.write("computation.angle = "+computation_angle+"\r\n");
-			
-			
+
+
 			if (computation_distribution == DISTRIBUTION_UNIFORM)      {writer_param.write("computation.distribution = uniform\r\n");}
 			if (computation_distribution == DISTRIBUTION_EXPONENTIAL)  {writer_param.write("computation.distribution = exponential\r\n");}
 			if (computation_distribution == DISTRIBUTION_NORMAL)       {writer_param.write("computation.distribution = normal\r\n");}
@@ -642,7 +672,7 @@ public class Parameters {
 			writer_param.write("option.sort.nodes = "+sort_nodes+"\r\n");
 			writer_param.write("option.simplify = "+remove_deg_2_nodes+"\r\n");
 			writer_param.write("option.ref.network = "+ref_to_network+"\r\n");
-			
+
 			writer_param.write("bias.x = "+bias_x+"\r\n");
 			writer_param.write("bias.y = "+bias_y+"\r\n");
 			writer_param.write("topology.tolerance = "+topo_tolerance+"\r\n");
@@ -650,7 +680,7 @@ public class Parameters {
 			writer_param.write("confidence.ratio = "+confidence_ratio+"\r\n");
 
 			writer_param.write("network.inaccuracies = "+network_inaccuracies+"\r\n");
-			
+
 			writer_param.write("\r\n");
 			writer_param.write("# Output \r\n");
 			writer_param.write("output.path = \""+output_path+"\"\r\n");
@@ -662,37 +692,36 @@ public class Parameters {
 			writer_param.write("output.delimiter = \""+output_delimiter+"\"\r\n");
 			writer_param.write("output.mute = "+output_mute+"\r\n");
 			writer_param.write("output.errors = "+output_errors+"\r\n");
-			writer_param.write("output.parameters = "+output_parameters+"\r\n");
 			writer_param.write("output.index = "+add_spatial_index+"\r\n");
 			writer_param.write("output.rmse = "+output_rmse+"\r\n");
 			writer_param.write("output.abs.type = "+abs_curv_type+"\r\n");
 			writer_param.write("output.confidence = "+output_confidence+"\r\n");
 			writer_param.write("output.index.all.edge = "+output_index_all_edge+"\r\n");
 			writer_param.write("output.index.coords = "+output_index_coords+"\r\n");
-			
+
 			if (index_format_csv){
-				
+
 				writer_param.write("output.index.format = csv\r\n");
-				
+
 			}
 			else {
-				
+
 				writer_param.write("output.index.format = xml\r\n");
-				
+
 			}
-			
-			
+
+
 			if (rmse_type_before){
-				
+
 				writer_param.write("output.rmse.type = before\r\n");
-				
+
 			}
 			else {
-				
+
 				writer_param.write("output.rmse.type = after\r\n");
-				
+
 			}
-			
+
 			writer_param.close();
 
 			Tools.println("ok");
@@ -701,28 +730,28 @@ public class Parameters {
 		} catch (FileNotFoundException e) {
 
 			if (MapMatching.gui_mode){
-				
+
 				JOptionPane.showMessageDialog(null, "Warning: cannot write parameters file", "Warning", JOptionPane.WARNING_MESSAGE);
-				
+
 			}else{
-				
+
 				Tools.println("Error: cannot write parameters file");
 				System.exit(14);
-				
+
 			}
 
 		}
 
 	}
-	
+
 	// Module to reset values
 	public static void reset(){
-		
+
 		Parameters.DISTRIBUTION_UNIFORM = 2;
 		Parameters.DISTRIBUTION_EXPONENTIAL = 3;
 		Parameters.DISTRIBUTION_NORMAL = 1;
 		Parameters.DISTRIBUTION_RAYLEIGH = 4;
-		
+
 		Parameters.input_network_path = "";
 		Parameters.input_track_path = "";
 
@@ -732,7 +761,7 @@ public class Parameters {
 		Parameters.output_report = true;
 		Parameters.graphical_output = false;
 		Parameters.output_parameters = false;
-		
+
 		Parameters.network_delimiter = ",";
 		Parameters.track_delimiter = ",";
 		Parameters.output_delimiter = ",";
@@ -773,19 +802,19 @@ public class Parameters {
 		Parameters.computation_autocorrelation = 0.0;
 		Parameters.computation_scope = 100;
 		Parameters.computation_angle = 0.0;
-		
+
 		Parameters.bias_x = 0.0;
 		Parameters.bias_y = 0.0;
 		Parameters.network_rmse = 0.0;
-		
+
 		Parameters.computation_speed_limit = Double.MAX_VALUE;
-		
+
 		Parameters.abs_curv_type = "from_source_m";
 
 		Parameters.sort_nodes = false;
 		Parameters.failure_skip = false;
 		Parameters.make_topology = false;
-		
+
 		Parameters.max_number_candidates = -1;
 		Parameters.topo_tolerance = 0.01;
 		Parameters.confidence_ratio = 0.0;
@@ -807,17 +836,17 @@ public class Parameters {
 		Parameters.output_index_all_edge = false;
 		Parameters.output_index_coords = false;
 		Parameters.network_inaccuracies = false;
-		
+
 		Parameters.buffer_radius = 300;
 		Parameters.distance_buffer = "full_network";
-		
+
 		Parameters.graphical_output = false;
-		
+
 		Parameters.gui_report_path = "";
 		Parameters.gui_parameters_path = "";
 
 		Parameters.input_track_path_list = new ArrayList<String>();
-		
+
 	}
 
 }
