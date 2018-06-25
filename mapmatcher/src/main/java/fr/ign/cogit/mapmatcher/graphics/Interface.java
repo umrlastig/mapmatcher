@@ -3114,6 +3114,7 @@ public class Interface {
 					}
 
 				};
+				
 				filechooser.setDialogTitle("Parameters file");
 				filechooser.showOpenDialog(null);
 
@@ -3127,10 +3128,12 @@ public class Interface {
 
 					removeHelpText();
 					Parameters.load(filechooser.getSelectedFile().getAbsolutePath());
+					
 
 					// ------------------------------------------------------------------
 					// Filling interface fields
 					// ------------------------------------------------------------------
+					
 
 					textField.setText(Parameters.input_network_path);
 					textField_1.setText(Parameters.input_track_path);
@@ -3303,7 +3306,7 @@ public class Interface {
 
 					}
 
-
+					
 				}
 
 			}
@@ -3311,7 +3314,7 @@ public class Interface {
 
 		addHelpText();
 		setToolTips(true);
-
+		
 	}
 
 

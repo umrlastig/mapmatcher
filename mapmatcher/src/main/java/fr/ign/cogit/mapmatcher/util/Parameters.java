@@ -469,28 +469,9 @@ public class Parameters {
 			System.exit(8);
 
 		}
+		//C:\Users\ymeneroux\Desktop\Recherches\18-Mitaka\11-relational_learning\2-map_matching\parameters.txt
 
-		
-		// List output
-		if ((!input_track_path.contains("*")) && (!input_track_path.contains(";"))){
 
-			input_track_path_list.add(input_track_path);
-
-		}
-		else{
-
-			readMultipleFiles();
-			
-			input_track_path = "";
-			
-			for (int i=0; i<input_track_path_list.size(); i++) {	
-				input_track_path = input_track_path+input_track_path_list.get(i);
-				if (i != input_track_path_list.size()-1) {
-					input_track_path = input_track_path+";";
-				}
-			}
-
-		}
 
 	}
 
