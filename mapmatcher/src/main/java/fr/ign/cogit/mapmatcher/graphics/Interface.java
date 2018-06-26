@@ -42,7 +42,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -60,6 +59,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
+import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JSlider;
 import javax.swing.JSpinner;
@@ -75,7 +75,6 @@ import javax.swing.event.ChangeListener;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.plaf.basic.BasicSliderUI;
-import javax.swing.JRadioButton;
 
 import fr.ign.cogit.mapmatcher.core.Main;
 import fr.ign.cogit.mapmatcher.core.MapMatching;
@@ -254,6 +253,7 @@ public class Interface {
 	private JButton btnQuit;
 	private JButton btnPrevious;
 	private JButton btnPrevious_1;
+	private JButton getFromMap;
 	private static JButton btnCompute; 
 
 	private String[] CHOICE_DISTRIBUTIONS = new String[] {"Normal   ", "Uniform", "Exponential", "Rayleigh"};
@@ -269,7 +269,7 @@ public class Interface {
 	private JTextField textField_18;
 
 	private boolean helpMultipleTrackPaths = true; 
-	
+
 	private String web_link = "https://github.com/IGNF/mapmatcher";
 
 
@@ -994,12 +994,17 @@ public class Interface {
 		chckbxRemoveDegree.setBounds(194, 70, 181, 23);
 		panel.add(chckbxRemoveDegree);
 
-		button_5 = new JButton("\u2315");
+		Font font = new Font("Arial Unicode MS", Font.PLAIN, 23);
+		
+		button_5 = new JButton("\u25CB");
+		button_5.setFont(font);
 		button_5.setMargin(new Insets(0,0,0,0));
 		button_5.setBounds(350, 38, 30, 25);
 		panel.add(button_5);
 
-		button_1 = new JButton("\u2315");
+		button_1 = new JButton("\u25CB");
+		button_1.setFont(font);
+		
 		button_1.setMargin(new Insets(0, 0, 0, 0));
 		button_1.setBounds(350, 220, 30, 25);
 		panel.add(button_1);
@@ -1309,6 +1314,65 @@ public class Interface {
 
 			}
 		});
+
+		// --------------------------------------------------------------------------------------
+		// Test if getnet.jar is available
+		// --------------------------------------------------------------------------------------
+		File file_getnet_jar = new File("getnet/getnet.jar");
+		
+		if (file_getnet_jar.isFile()){
+
+			getFromMap = new JButton("BD TOPO");
+			getFromMap.setBounds(280, 10, 100, 20);
+			panel.add(getFromMap);
+
+			getFromMap.addActionListener(new ActionListener() {
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					
+					String proxy = "";
+					String key = "";
+					
+					File file_key = new File("getnet/key.dat");
+					
+					if (file_key.isFile()){
+						
+						try {
+							
+							@SuppressWarnings("resource")
+							Scanner scan = new Scanner(file_key);
+							key = " "+scan.nextLine();
+							
+							if (scan.hasNextLine()){
+								StringTokenizer st = new StringTokenizer(scan.nextLine(),":");
+								proxy = " -Dhttp.proxyHost="+st.nextToken(":")+" -Dhttp.proxyPort="+st.nextToken(":");
+							}
+							
+						} catch (FileNotFoundException e1) {
+							
+							e1.printStackTrace();
+						}
+						
+					}
+
+					try {
+						
+						String cmd = "java"+proxy+" -jar getnet/getnet.jar"+key;
+						Runtime.getRuntime().exec(cmd);
+						
+					} catch (IOException e1) {
+						e1.printStackTrace();
+					}
+
+
+				}
+
+
+			});
+
+		}
+		// --------------------------------------------------------------------------------------
 
 
 		// Confirm clean output directory
@@ -2903,7 +2967,7 @@ public class Interface {
 				if (Desktop.isDesktopSupported()) {
 					try {
 						Desktop.getDesktop().browse(new URI(web_link));
-					} catch (IOException | URISyntaxException e1) {
+					} catch (Exception e1) {
 						e1.printStackTrace();
 					}
 				}else {
@@ -2933,7 +2997,7 @@ public class Interface {
 				}
 
 			}
-			
+
 		});
 
 		chckbxRecordMapmatchedPoint.addActionListener(new ActionListener() {
@@ -3114,7 +3178,7 @@ public class Interface {
 					}
 
 				};
-				
+
 				filechooser.setDialogTitle("Parameters file");
 				filechooser.showOpenDialog(null);
 
@@ -3128,12 +3192,12 @@ public class Interface {
 
 					removeHelpText();
 					Parameters.load(filechooser.getSelectedFile().getAbsolutePath());
-					
+
 
 					// ------------------------------------------------------------------
 					// Filling interface fields
 					// ------------------------------------------------------------------
-					
+
 
 					textField.setText(Parameters.input_network_path);
 					textField_1.setText(Parameters.input_track_path);
@@ -3306,7 +3370,7 @@ public class Interface {
 
 					}
 
-					
+
 				}
 
 			}
@@ -3314,7 +3378,7 @@ public class Interface {
 
 		addHelpText();
 		setToolTips(true);
-		
+
 	}
 
 
