@@ -65,9 +65,9 @@ public class Main {
 		Parameters.load(parameter_file);
 
 		Loaders.parameterize();
-		MapMatching.parameterize();  
+		Parameters.readMultipleFiles();
+		MapMatching.parameterize(); 
 		
-		System.out.println(Parameters.distance_buffer);
 
 		// Buffering on 1st track
 		if (Parameters.distance_buffer.equals("1st_track") && (Parameters.precompute_distances)){

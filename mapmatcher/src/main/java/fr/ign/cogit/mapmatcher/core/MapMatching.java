@@ -330,10 +330,10 @@ public class MapMatching {
 		if (Parameters.output_clear){
 
 			if (MapMatching.gui_mode){
-				Main.gui.label_17.setText("Clearing output folder...");
+				Main.gui.label_17.setText("Cleaning output folder...");
 			}
 
-			Tools.println("Clearing output folder");
+			Tools.println("Cleaning output folder");
 
 			File[] listOfFiles = (new File(Parameters.output_path)).listFiles();
 
@@ -361,6 +361,7 @@ public class MapMatching {
 			Parameters.print();
 
 		}
+	
 
 		// ----------------------------------------------------------
 		// Map-matching
@@ -373,7 +374,8 @@ public class MapMatching {
 			Tools.println("Processing tracks...");
 
 		}
-
+	
+		
 		// Processing tracks
 		for (int i=0; i<input_tracks.size(); i++){
 
@@ -485,7 +487,7 @@ public class MapMatching {
 
 			if (Parameters.index_format_csv){
 
-				network.printIndex(Parameters.output_path+"\\"+"index.metadat");
+				network.printIndex(Parameters.output_path+"\\"+"index.csv");
 
 			}
 			else{
@@ -499,7 +501,7 @@ public class MapMatching {
 		// ----------------------------------------------------------
 		// Print network file if modified
 		// ----------------------------------------------------------
-		if ((Parameters.make_topology) || (Parameters.remove_deg_2_nodes) || (Parameters.add_spatial_index)){
+		if ((Parameters.make_topology) || (Parameters.remove_deg_2_nodes)){
 
 			String p = Parameters.output_path+"\\"+"network_topo.wkt";
 
