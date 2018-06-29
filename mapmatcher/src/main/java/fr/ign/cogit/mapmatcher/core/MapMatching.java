@@ -74,7 +74,7 @@ public class MapMatching {
 	private static int UNSOLVED_POINT = -999999999;
 	// -------------------------------------------------------------------
 	
-	public static int INDEX_BATCH_SIZE = 2;
+	public static int INDEX_BATCH_SIZE = 30000;
 	
 	// -------------------------------------------------------------------
 
@@ -473,7 +473,7 @@ public class MapMatching {
 							String file1 = output_folder+"\\index.xml";
 							String file2 = output_folder+"\\index"+num+".xml";
 							
-					//		Network.mergeXml(file1, file2);
+							Tools.mergeXml(file1, file2);
 							
 						}
 						

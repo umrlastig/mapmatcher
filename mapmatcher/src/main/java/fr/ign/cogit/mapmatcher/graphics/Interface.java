@@ -1804,8 +1804,7 @@ public class Interface {
 		btnCompute.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
-
-
+				
 				Loaders.setBufferNull();
 				Tools.progressPercentage(0, 100, true);
 
@@ -2114,7 +2113,7 @@ public class Interface {
 				// -----------------------------------------------------------
 				// Test coordinates system
 				// -----------------------------------------------------------
-				
+				Loaders.parameterize();
 				Track track = Loaders.loadTrack(Parameters.input_track_path_list.get(0));
 				double x = track.getX().get(0);
 				double y = track.getY().get(0);
@@ -2159,6 +2158,7 @@ public class Interface {
 				Thread worker = new Thread() {
 					public void run() {
 
+						
 						final int code = MapMatching.executeAllProcessFromGUI();
 
 						SwingUtilities.invokeLater(new Runnable() {

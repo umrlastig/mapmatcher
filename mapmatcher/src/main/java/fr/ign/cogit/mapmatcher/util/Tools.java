@@ -16,9 +16,12 @@ import java.awt.Color;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.Scanner;
+import java.util.TreeMap;
 
 import javax.swing.JOptionPane;
+import java.util.Map.Entry;
 
 import fr.ign.cogit.mapmatcher.network.Network;
 
@@ -26,13 +29,26 @@ import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryFactory;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+
 import fr.ign.cogit.mapmatcher.core.Main;
 import fr.ign.cogit.mapmatcher.core.MapMatching;
 
 public class Tools {
 
 	public static int maxBareSize = 65; 
-	
+
 	public static PrintStream output_stream = System.out;
 
 	// Geodetic parameters
@@ -47,7 +63,7 @@ public class Tools {
 	private static double Y0 = 0.0;
 
 	private static int binary_precision = 64;
-	
+
 	private static ArrayList<Double> DISTORSION = new ArrayList<Double>();
 
 	public static void setLongitudeOrigine(double lon0) {Tools.lon0 = lon0*pi/180;}
@@ -743,20 +759,20 @@ public class Tools {
 		}
 
 		Collections.sort(values);
-		
+
 		double median = 0;
-		
+
 		if (values.size() % 2 == 0){
-			
+
 			median = values.get(values.size()/2) +  values.get(values.size()/2+1);
-			
+
 		}
 		else{
-			
+
 			median = values.get(values.size()/2+1);
-			
+
 		}
-		
+
 		return median;
 
 	} 
@@ -778,7 +794,7 @@ public class Tools {
 
 		if (MapMatching.gui_mode){
 
-		  Main.gui.progressBar.setForeground(Color.RED);
+			Main.gui.progressBar.setForeground(Color.RED);
 
 			JOptionPane.showMessageDialog(null, line, "Error", JOptionPane.ERROR_MESSAGE);
 
@@ -800,8 +816,8 @@ public class Tools {
 
 		if ((!MapMatching.gui_mode) && (!Parameters.output_mute)){
 
-				output_stream.print(line);
-		
+			output_stream.print(line);
+
 		}
 
 	}
@@ -942,4 +958,248 @@ public class Tools {
 
 	}
 
+	// ----------------------------------------------------------------------
+	// Method to merge index blocs
+	// ----------------------------------------------------------------------
+	public static void mergeXml(String mergedFile, String fileToInsert) {
+
+		try {
+
+			// Lecture du fichier "fusion"
+			DocumentBuilderFactory documentBuilderFactory0 = DocumentBuilderFactory.newInstance();
+			DocumentBuilder documentBuilder0 = documentBuilderFactory0.newDocumentBuilder();
+			Document document0 = documentBuilder0.parse(mergedFile);
+			Element root0 = document0.getDocumentElement();
+
+			// System.out.println("Fichier 0 - total path : " + root0.getElementsByTagName("paths").getLength());
+			// System.out.println("Fichier 0 - total edge : " + root0.getElementsByTagName("edge").getLength());
+
+			DocumentBuilderFactory documentBuilderFactory1 = DocumentBuilderFactory.newInstance();
+			DocumentBuilder documentBuilder1 = documentBuilderFactory1.newDocumentBuilder();
+			Document document1 = documentBuilder1.parse(fileToInsert);
+			Element root1 = document1.getDocumentElement();
+
+			// System.out.println("Fichier 1 - total path : " + root1.getElementsByTagName("paths").getLength());
+			// System.out.println("Fichier 1 - total edge : " + root1.getElementsByTagName("edge").getLength());
+
+
+			// =============================================================================================
+
+			//   Fusion des PATHS
+
+			// Noeud parent dans lequel on va ajouter les enfants
+
+			Node noeudPath0 = root0.getElementsByTagName("paths").item(0);
+
+
+			// Liste des identifiants déjà présents dans le fichier
+
+			TreeMap<Integer, Node> listExistingId = new TreeMap<Integer, Node>();
+
+			for (int j = 0; j < noeudPath0.getChildNodes().getLength(); j++) {
+				Node node = noeudPath0.getChildNodes().item(j);
+				if (node instanceof Element) {
+					Element trackNode = (Element)node;
+					listExistingId.put(Integer.parseInt(trackNode.getAttribute("id")), trackNode);
+				}
+			}
+
+
+			Node nodePath1 = root1.getElementsByTagName("paths").item(0);
+
+
+			// On ajoute les tracks du path 1 qui n'y sont pas encore
+			for (int j = 0; j < nodePath1.getChildNodes().getLength(); j++) {
+				Node node = nodePath1.getChildNodes().item(j);
+				if (node instanceof Element) {
+					Element trackNode = (Element)node;
+					int id = Integer.parseInt(trackNode.getAttribute("id"));
+
+					// Est-ce que c'est un nouveau premier élément ?
+					if (listExistingId.get(id) == null) {
+
+						// On récupère le noeud juste inférieur car c'est trié
+						if (listExistingId.headMap(id).size() > 0) {
+
+							// Dernier noeud dont l'identifiant est inférieur à celui qu'on veut fusionner
+							Node n = listExistingId.get(listExistingId.headMap(id).lastKey());
+
+							// On ajoute le noeud
+							Node firstDocImportedNode = document0.importNode(trackNode, true);
+							noeudPath0.insertBefore(firstDocImportedNode, n.getNextSibling());
+
+							// On met a jour la liste des identifiants
+							listExistingId.put(id, firstDocImportedNode);
+
+						} else {
+
+							// C'est un nouveau premier élément
+							Node firstDocImportedNode = document0.importNode(trackNode, true);
+							noeudPath0.insertBefore(firstDocImportedNode, noeudPath0.getFirstChild());
+
+							// Mise à jour la liste des identifiants ?
+							listExistingId.put(id, firstDocImportedNode);
+
+						}
+
+					}
+
+				}
+
+			}
+
+
+			// =============================================================================================
+
+			//   Fusion des EDGES
+			NodeList listExistingEdge = root0.getElementsByTagName("edge");
+
+			// Liste des identifiants EDGE#TRACK déjà présents dans le fichier
+			TreeMap<Integer, Object[]> treeExistingEdgeTrack = new TreeMap<Integer, Object[]>();
+			for (int j = 0; j < listExistingEdge.getLength(); j++) {
+				Node node = listExistingEdge.item(j);
+				if (node instanceof Element) {
+					Element edgeNode = (Element)node;
+					int idEdge = Integer.parseInt(edgeNode.getAttribute("id"));
+
+					// Liste des tracks
+					List<Integer> listTrack = new ArrayList<Integer>();
+					for (int k = 0; k < edgeNode.getChildNodes().getLength(); k++) {
+						Node nodeEnfant = edgeNode.getChildNodes().item(k);
+						if (nodeEnfant instanceof Element) {
+							Element trackNode = (Element)nodeEnfant;
+							int idTrack = Integer.parseInt(trackNode.getAttribute("id"));
+							listTrack.add(idTrack);
+						}
+					}
+
+					Object[] treeEdgeTrack = new Object[2];
+					treeEdgeTrack[0] = edgeNode;
+					treeEdgeTrack[1] = listTrack;
+					treeExistingEdgeTrack.put(idEdge, treeEdgeTrack);
+
+				}
+
+			}
+
+			// On boucle sur les edges-tracks à insérer
+			NodeList listEdgeToInsert = root1.getElementsByTagName("edge");
+
+			for (int j = 0; j < listEdgeToInsert.getLength(); j++) {
+				
+				Node nodeE = listEdgeToInsert.item(j);
+				if (nodeE instanceof Element) {
+					Element edgeNode = (Element)nodeE;
+					int idEdge = Integer.parseInt(edgeNode.getAttribute("id"));
+
+					// Est-ce que le edge existe ?
+					if (treeExistingEdgeTrack.get(idEdge) == null) {
+
+						// Est-ce que c'est un nouveau premier élément ?
+						if (treeExistingEdgeTrack.headMap(idEdge).size() <= 0) {
+
+							Entry<Integer, Object[]> ent = treeExistingEdgeTrack.firstEntry();
+							Element elt = (Element)ent.getValue()[0];
+							Node firstDocImportedNode = document0.importNode(edgeNode, true);
+							elt.getParentNode().insertBefore(firstDocImportedNode, elt);
+
+						} else {
+
+							// On cherche le plus grand id edge inférieur à idEdge
+							int lastKey = treeExistingEdgeTrack.headMap(idEdge).lastKey();
+							Element lastElt = (Element)treeExistingEdgeTrack.get(lastKey)[0];
+
+							// On ajoute le edge
+							Node firstDocImportedNode = document0.importNode(edgeNode, true);
+							lastElt.getParentNode().insertBefore(firstDocImportedNode, lastElt.getNextSibling());
+
+
+							// On met a jour la liste des identifiants
+							// listExistingId.put(id, firstDocImportedNode);
+
+							Object[] treeEdgeTrack = new Object[2];
+							treeEdgeTrack[0] = firstDocImportedNode;
+							treeEdgeTrack[1] = new ArrayList<Integer>();
+							treeExistingEdgeTrack.put(idEdge, treeEdgeTrack);
+
+							// Le count n'a pas besoin d'être mis à jour
+
+						}
+
+					} else {
+
+						// Le EDGE existe deja, on ajoute uniquement les tracks
+
+						// On recupere le COUNT
+						Element e = (Element) treeExistingEdgeTrack.get(idEdge)[0];
+						int count = Integer.parseInt(e.getAttribute("count"));
+						int add = Integer.parseInt(edgeNode.getAttribute("count"));
+						((Element) treeExistingEdgeTrack.get(idEdge)[0]).setAttribute("count", Integer.toString(count + add));
+
+						// On récupère d'abord les tracks
+
+						for (int k = 0; k < edgeNode.getChildNodes().getLength(); k++) {
+							Node nodeEnfant = edgeNode.getChildNodes().item(k);
+							if (nodeEnfant instanceof Element) {
+								Element trackAInserer = (Element)nodeEnfant;
+								int idTrack = Integer.parseInt(trackAInserer.getAttribute("id"));
+
+								// On recupere le edge qui a le même numero
+								Object[] tabEdgeToMerged = treeExistingEdgeTrack.get(idEdge);
+								Element edgeToMerged = (Element) tabEdgeToMerged[0];
+
+								// On cherche le track juste apres
+								// par defaut c'est le premier
+								Element t0 = (Element) edgeToMerged.getElementsByTagName("track").item(0);
+								for (int cpt = 0; cpt < edgeToMerged.getElementsByTagName("track").getLength(); cpt++) {
+									Element t = (Element)edgeToMerged.getElementsByTagName("track").item(cpt);
+									int idAComp = Integer.parseInt(t.getAttribute("id"));
+
+									if (idTrack < idAComp) {
+										t0 = t;
+										break;
+									}
+								}
+
+								Node firstDocImportedNode = document0.importNode(trackAInserer, true);
+								t0.getParentNode().insertBefore(firstDocImportedNode, t0);
+
+							}
+
+						}
+
+						// break;
+
+					}
+
+				}
+
+			}
+
+
+			// =============================================================================================
+
+			//   On rééecrit en streaming
+			DOMSource source = new DOMSource(document0);
+
+			TransformerFactory transformerFactory = TransformerFactory.newInstance();
+			Transformer transformer = transformerFactory.newTransformer();
+			transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+			transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "4");
+
+			StreamResult result = new StreamResult(mergedFile);
+			transformer.transform(source, result);
+
+
+		} catch (Exception e) {
+
+			e.printStackTrace();
+
+		}
+
+	}
+
+
 }
+
+

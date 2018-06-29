@@ -208,7 +208,7 @@ public class Loaders {
 	// ----------------------------------------------
 	@SuppressWarnings("resource")
 	public static Track loadTrackFromCSV(String path){
-
+		
 		Scanner scan = null;
 
 		// Load data
@@ -232,10 +232,10 @@ public class Loaders {
 
 		// Date converter
 		SimpleDateFormat df = new SimpleDateFormat(dateFmt);
-
+		
 		// Header
 		if (track_header){
-
+	
 			String header = scan.nextLine();
 
 			StringTokenizer st = new StringTokenizer(header, columns_delimiter_track);
@@ -257,7 +257,7 @@ public class Loaders {
 
 			if (columns_x_id == -1){
 
-				Tools.printError("Error : x coordinate column \""+columns_x_name+"\" has not been found in network input file");
+				Tools.printError("Error : x coordinate column \""+columns_x_name+"\" has not been found in track input file");
 				if (MapMatching.gui_mode){
 					return null;
 				}else{
@@ -268,7 +268,7 @@ public class Loaders {
 
 			if (columns_y_id == -1){
 
-				Tools.printError("Error : y coordinate column \""+columns_y_name+"\" has not been found in network input file");
+				Tools.printError("Error : y coordinate column \""+columns_y_name+"\" has not been found in track input file");
 				if (MapMatching.gui_mode){
 					return null;
 				}else{
@@ -282,7 +282,7 @@ public class Loaders {
 
 				if (!MapMatching.gui_mode){
 
-					Tools.printError("Error : timestamp column \""+columns_t_name+"\" has not been found in network input file");
+					Tools.printError("Error : timestamp column \""+columns_t_name+"\" has not been found in track input file");
 					System.exit(1);
 
 				}
