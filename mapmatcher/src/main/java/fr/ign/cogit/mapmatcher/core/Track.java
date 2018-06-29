@@ -101,7 +101,7 @@ public class Track {
 		// For each polyline
 		for (int i=0; i<X.size(); i++){
 
-			// Current coordinate
+			// Current coordinateF
 			Coordinate cc = new Coordinate(X.get(i), Y.get(i));
 
 			// Local mercator projection

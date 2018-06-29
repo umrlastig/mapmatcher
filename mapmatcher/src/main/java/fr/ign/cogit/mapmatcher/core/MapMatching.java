@@ -73,6 +73,10 @@ public class MapMatching {
 
 	private static int UNSOLVED_POINT = -999999999;
 	// -------------------------------------------------------------------
+	
+	public static int INDEX_BATCH_SIZE = 2;
+	
+	// -------------------------------------------------------------------
 
 	private static ArrayList<ArrayList<Double>> CANDIDATES_D;
 	private static ArrayList<ArrayList<Integer>> CANDIDATES_I;
@@ -119,18 +123,18 @@ public class MapMatching {
 		// Transmit parameters
 		Loaders.parameterize();
 		MapMatching.parameterize();
-		
+
 		if (Parameters.graphical_output){
-			
+
 			Main.gui.graphics.setNetwork(Loaders.loadNetwork(Parameters.input_network_path));
 
 		}
 
-		
+
 		if (MapMatching.gui_mode){
 			Main.gui.label_17.setText("Computing buffer...");
 		}
-		
+
 		Tools.progressPercentage(0, input_tracks.size(), MapMatching.gui_mode);
 
 
@@ -138,14 +142,14 @@ public class MapMatching {
 		if (Parameters.distance_buffer.equals("1st_track") && (Parameters.precompute_distances)){
 
 			Track track = Loaders.loadTrack(MapMatching.input_tracks.get(0));
-			
+
 			if (track.getX().size() > 1){
-				
+
 				Geometry geom = track.makeBuffer(4.0/3.0*Parameters.buffer_radius);
 				Loaders.setBuffer(geom);
-				
+
 			}
-			
+
 		}
 
 		// Buffering on all tracks
@@ -158,11 +162,11 @@ public class MapMatching {
 			for (int f=0; f<input_tracks.size(); f++){
 
 				Track track = Loaders.loadTrack(MapMatching.input_tracks.get(f));
-				
+
 				if (track.getX().size() < 2){continue;}
 
 				geom = geom.union(track.makeBuffer(4.0/3.0*Parameters.buffer_radius));
-				
+
 				Tools.progressPercentage(f, input_tracks.size(), MapMatching.gui_mode);
 
 			}
@@ -170,7 +174,7 @@ public class MapMatching {
 			Loaders.setBuffer(geom);
 
 			Tools.progressPercentage(input_tracks.size(), input_tracks.size(), MapMatching.gui_mode);
-			
+
 		}
 
 
@@ -180,7 +184,7 @@ public class MapMatching {
 		}
 
 		Network network = Loaders.loadNetwork(Parameters.input_network_path);
-		
+
 		if (network == null){
 			if (MapMatching.gui_mode){
 				Main.gui.label_17.setText("");
@@ -361,7 +365,7 @@ public class MapMatching {
 			Parameters.print();
 
 		}
-	
+
 
 		// ----------------------------------------------------------
 		// Map-matching
@@ -374,8 +378,9 @@ public class MapMatching {
 			Tools.println("Processing tracks...");
 
 		}
-	
-		
+
+		int index_files_counter = 0;
+
 		// Processing tracks
 		for (int i=0; i<input_tracks.size(); i++){
 
@@ -440,6 +445,48 @@ public class MapMatching {
 
 			execute(track, output);
 
+
+			// ----------------------------------------------------------
+			// Output index (step by step if necessary)
+			// ----------------------------------------------------------
+			if (Parameters.add_spatial_index){
+				
+				if ((i % INDEX_BATCH_SIZE == INDEX_BATCH_SIZE-1) || (i == input_tracks.size()-1)){
+
+					String num = "";
+
+					if (index_files_counter > 0){
+						num = index_files_counter+"";
+					}
+
+
+					if (Parameters.index_format_csv){
+						
+						network.printIndex(output_folder+"\\index"+num+".csv");
+						
+					}else{
+						
+						network.printIndexInXml(output_folder+"\\index"+num+".xml");
+						
+						if (index_files_counter > 0){
+							
+							String file1 = output_folder+"\\index.xml";
+							String file2 = output_folder+"\\index"+num+".xml";
+							
+					//		Network.mergeXml(file1, file2);
+							
+						}
+						
+					}
+
+					network.makeSystem();
+					
+					index_files_counter ++;
+
+				}
+				
+			}
+
 		}
 
 		// ---------------------------------------------------------------------
@@ -477,24 +524,6 @@ public class MapMatching {
 		if (Parameters.output_debug){
 
 			printWktAfterMapMatching();
-
-		}
-
-		// ----------------------------------------------------------
-		// Print index (meta-data)
-		// ----------------------------------------------------------
-		if (Parameters.add_spatial_index){
-
-			if (Parameters.index_format_csv){
-
-				network.printIndex(Parameters.output_path+"\\"+"index.csv");
-
-			}
-			else{
-
-				network.printIndexInXml(Parameters.output_path+"\\"+"index.xml");
-
-			}
 
 		}
 
@@ -1039,7 +1068,7 @@ public class MapMatching {
 							l = t1 - s1;
 
 							if (network.getOneWay().get(link1) != 0){
-								
+
 								// System.out.println(network.getEdgeName(link1)+","+network.getOneWay().get(link1)+","+l);
 
 								if ((network.getOneWay().get(link1) > 0) && (l < 0)){
@@ -1047,14 +1076,14 @@ public class MapMatching {
 									l = Double.MAX_VALUE/CANDIDATES_C.size();
 
 								}
-								
+
 								if ((network.getOneWay().get(link1) < 0) && (l > 0)){
 
 									l = Double.MAX_VALUE/CANDIDATES_C.size();
 
 								}
-								
-							
+
+
 							}
 							else{
 
@@ -1814,7 +1843,13 @@ public class MapMatching {
 			}
 
 			Main.gui.graphics.addTrack(track);
+
+			if (Parameters.project_coordinates){
+				track_mm.toLocalMercator();	
+			}
+			
 			Main.gui.graphics.addTrackMm(track_mm);
+			
 
 		}
 
@@ -1954,7 +1989,7 @@ public class MapMatching {
 			double transition = Parameters.computation_transition;
 			double exp = Tools.round(rmse, 2);
 			double sigma_posterior = Tools.round(1.4826*mad, 2);
-			
+
 			rmse = Tools.round(Math.sqrt(2)*rmse, 2);
 
 			String NetworkPath = network.getPath();

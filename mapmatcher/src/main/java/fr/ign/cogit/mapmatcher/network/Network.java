@@ -33,6 +33,17 @@ import com.vividsolutions.jts.geom.prep.PreparedGeometry;
 import com.vividsolutions.jts.geom.prep.PreparedGeometryFactory;
 import com.vividsolutions.jts.index.strtree.STRtree;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+
 import fr.ign.cogit.mapmatcher.core.Main;
 import fr.ign.cogit.mapmatcher.core.MapMatching;
 
@@ -1347,5 +1358,62 @@ public class Network {
 		Tools.println("Vertices = "+verticeNumber+" [+"+reduc_vertex+" %]");
 
 	}
+	
+	
+	
+	// -----------------------------------------------------
+	// Method to merge index blocs
+	// -----------------------------------------------------
+	public static void mergeXml(String file1, String file2) {
 
+	    try {
+
+	      DocumentBuilderFactory documentBuilderFactory0 = DocumentBuilderFactory.newInstance();
+	      DocumentBuilder documentBuilder0 = documentBuilderFactory0.newDocumentBuilder();
+	      Document document0 = documentBuilder0.parse(file1);
+	      Element root0 = document0.getDocumentElement();
+	      Node noeudPath0 = root0.getElementsByTagName("paths").item(0);
+
+	
+	      DocumentBuilderFactory documentBuilderFactory1 = DocumentBuilderFactory.newInstance();
+	      DocumentBuilder documentBuilder1 = documentBuilderFactory1.newDocumentBuilder();
+	      Document document1 = documentBuilder1.parse(file2);
+	      Element root1 = document1.getDocumentElement();
+
+	      Node nodePath1 = root1.getElementsByTagName("paths").item(0);
+	      Node nodeEdgeLast = root1.getLastChild(); //.getElementsByTagName("paths").item(root1.getElementsByTagName("paths").getLength() - 1);
+
+	    
+	      // On ajoute le path 1
+	      Node firstDocImportedNode = document0.importNode(nodePath1, true);
+	      root0.insertBefore(firstDocImportedNode, noeudPath0.getNextSibling());
+
+	      // On ajoute les n edge
+
+	      for (int i = 0; i < root1.getElementsByTagName("edge").getLength(); i++) {
+
+	        Node noeudEdge1 = root1.getElementsByTagName("edge").item(i);
+
+	        // On ajoute le ieme index
+
+	        firstDocImportedNode = document0.importNode(noeudEdge1, true);
+	        root0.insertBefore(firstDocImportedNode, nodeEdgeLast.getNextSibling());
+
+	      }
+
+	      DOMSource source = new DOMSource(document0);
+	      TransformerFactory transformerFactory = TransformerFactory.newInstance();
+	      Transformer transformer = transformerFactory.newTransformer();
+	      StreamResult result = new StreamResult(file1);
+
+	      transformer.transform(source, result);
+	    
+	    } catch (Exception e) {
+
+	      e.printStackTrace();
+
+	    }
+
+	  }
+	
 }
