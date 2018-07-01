@@ -25,6 +25,15 @@ import java.util.NoSuchElementException;
 import java.util.Scanner;
 import java.util.StringTokenizer;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
+
 import fr.ign.cogit.mapmatcher.network.Network;
 
 import com.vividsolutions.jts.geom.Coordinate;
@@ -176,12 +185,30 @@ public class Loaders {
 
 	}
 
+	
+	// ----------------------------------------------
+	// Module to load GPS track from CSV or GPX
+	// ----------------------------------------------
+	public static Track loadTrack(String path){
+		
+		if (path.endsWith("gpx")){
+			
+			return loadTrackFromGPX(path);
+			
+		}else{
+			
+			return loadTrackFromCSV(path);
+			
+		}
+		
+	}
+	
 	// ----------------------------------------------
 	// Module to load GPS track without header
 	// ----------------------------------------------
 	@SuppressWarnings("resource")
-	public static Track loadTrack(String path){
-
+	public static Track loadTrackFromCSV(String path){
+		
 		Scanner scan = null;
 
 		// Load data
@@ -205,10 +232,10 @@ public class Loaders {
 
 		// Date converter
 		SimpleDateFormat df = new SimpleDateFormat(dateFmt);
-
+		
 		// Header
 		if (track_header){
-
+	
 			String header = scan.nextLine();
 
 			StringTokenizer st = new StringTokenizer(header, columns_delimiter_track);
@@ -230,7 +257,7 @@ public class Loaders {
 
 			if (columns_x_id == -1){
 
-				Tools.printError("Error : x coordinate column \""+columns_x_name+"\" has not been found in network input file");
+				Tools.printError("Error : x coordinate column \""+columns_x_name+"\" has not been found in track input file");
 				if (MapMatching.gui_mode){
 					return null;
 				}else{
@@ -241,7 +268,7 @@ public class Loaders {
 
 			if (columns_y_id == -1){
 
-				Tools.printError("Error : y coordinate column \""+columns_y_name+"\" has not been found in network input file");
+				Tools.printError("Error : y coordinate column \""+columns_y_name+"\" has not been found in track input file");
 				if (MapMatching.gui_mode){
 					return null;
 				}else{
@@ -255,7 +282,7 @@ public class Loaders {
 
 				if (!MapMatching.gui_mode){
 
-					Tools.printError("Error : timestamp column \""+columns_t_name+"\" has not been found in network input file");
+					Tools.printError("Error : timestamp column \""+columns_t_name+"\" has not been found in track input file");
 					System.exit(1);
 
 				}
@@ -416,6 +443,107 @@ public class Loaders {
 	}
 
 	// ----------------------------------------------
+	// Module to load GPS track from GPX file
+	// ----------------------------------------------
+	public static Track loadTrackFromGPX(String path){
+		
+		ArrayList<Double> X = new ArrayList<Double>();
+		ArrayList<Double> Y = new ArrayList<Double>();
+		ArrayList<Double> Z = new ArrayList<Double>();
+		ArrayList<String> T = new ArrayList<String>();
+		ArrayList<Long> Tms = new ArrayList<Long>();
+		
+		Long time = 0l;
+
+		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+		DocumentBuilder builder = null;
+
+		try {
+			builder = factory.newDocumentBuilder();
+		}
+		catch (final ParserConfigurationException e) {
+			e.printStackTrace();
+		}
+
+		Document document = null;
+
+		try {
+			document = builder.parse(new File(path));
+		} catch (SAXException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		Element racine = document.getDocumentElement();
+		NodeList racineNoeuds = racine.getChildNodes();
+
+		for (int i=0; i<racineNoeuds.getLength(); i++){
+
+			if (!racineNoeuds.item(i).getNodeName().equals("trk")){
+				continue;
+			}
+
+			NodeList trk_list = racineNoeuds.item(i).getChildNodes();
+
+			for (int j=0; j<trk_list.getLength(); j++){
+
+				if (!trk_list.item(j).getNodeName().equals("trkseg")){
+					continue;
+				}
+
+				NodeList trk_seg_list = trk_list.item(j).getChildNodes();
+
+				for (int k=0; k<trk_seg_list.getLength(); k++){
+
+					if (!trk_seg_list.item(k).getNodeName().equals("trkpt")){
+						continue;
+					}
+
+					String x = trk_seg_list.item(k).getAttributes().getNamedItem("lon").getNodeValue();
+					String y = trk_seg_list.item(k).getAttributes().getNamedItem("lat").getNodeValue();
+
+					X.add(Double.parseDouble(x));
+					Y.add(Double.parseDouble(y));
+
+					NodeList pt_node_list = trk_seg_list.item(k).getChildNodes();
+
+
+
+					for (int l=0; l<pt_node_list.getLength(); l++){
+
+						if (pt_node_list.item(l).getNodeName().equals("ele")){
+
+							Z.add(Double.parseDouble(pt_node_list.item(l).getTextContent()));
+						}
+
+						if (pt_node_list.item(l).getNodeName().equals("time")){
+
+							T.add(pt_node_list.item(l).getTextContent());
+							Tms.add(time);
+							time = time + 1;
+						}
+
+					}
+
+				}
+
+			}
+
+		}
+		
+		if (Tms.size() == 0){
+			for (int i=0; i<X.size(); i++){
+				Tms.add((long)i);
+				T.add("no_time_stamp");
+			}
+		}
+
+		return new Track(X, Y, T, Tms, path);
+
+	}
+
+	// ----------------------------------------------
 	// Generic Module to load road network
 	// ----------------------------------------------
 	public static Network loadNetwork(String path){
@@ -513,10 +641,10 @@ public class Loaders {
 
 
 				counter ++;
-				
+
 			}
-			
-		
+
+
 
 			if (wkt_id == -1){
 
@@ -663,19 +791,19 @@ public class Loaders {
 			if (oneway_id > -1){
 
 				if ((values[oneway_id].equals("inverse"))||(values[oneway_id].equals("-1"))){
-					
+
 					ONE_WAY.add(0);
-					
+
 				}
 				else if ((values[oneway_id].equals("direct"))||(values[oneway_id].equals("1"))){
-					
+
 					ONE_WAY.add(1);
-					
+
 				}
 				else{
-					
+
 					ONE_WAY.add(0);
-					
+
 				}
 
 			}

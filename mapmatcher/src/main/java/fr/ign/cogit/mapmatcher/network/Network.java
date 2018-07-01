@@ -905,7 +905,12 @@ public class Network {
 			
 		}
 		
-		Main.gui.label_17.setText("Printing index...");
+		Tools.println("Printing index...");
+		
+		if (MapMatching.gui_mode){
+			Main.gui.label_17.setText("Printing index...");
+		}
+
 
 		PrintWriter pw = null;
 
@@ -980,7 +985,10 @@ public class Network {
 		Tools.progressPercentage(SYSTEM_POINT.size(), SYSTEM_POINT.size(), MapMatching.gui_mode);
 
 		Tools.println("Index file "+path.replace("\\", "/")+" : ok");
-		Main.gui.label_17.setText("");
+		
+		if (MapMatching.gui_mode){
+			Main.gui.label_17.setText("");
+		}
 
 	}
 
@@ -990,7 +998,9 @@ public class Network {
 	// -----------------------------------------------------
 	public void printIndexInXml(String path){
 
-		Main.gui.label_17.setText("Printing index...");
+		if (MapMatching.gui_mode){
+			Main.gui.label_17.setText("Printing index...");
+		}
 
 		PrintWriter pw = null;
 
@@ -1112,7 +1122,10 @@ public class Network {
 		Tools.progressPercentage(SYSTEM_POINT.size(), SYSTEM_POINT.size(), MapMatching.gui_mode);
 
 		Tools.println("Index file "+path.replace("\\", "/")+" : ok");
-		Main.gui.label_17.setText("");
+		
+		if (MapMatching.gui_mode){
+			Main.gui.label_17.setText("");
+		}
 
 	}
 
@@ -1334,5 +1347,5 @@ public class Network {
 		Tools.println("Vertices = "+verticeNumber+" [+"+reduc_vertex+" %]");
 
 	}
-
+	
 }

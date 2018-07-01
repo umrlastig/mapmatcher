@@ -78,6 +78,7 @@ import javax.swing.plaf.basic.BasicSliderUI;
 
 import fr.ign.cogit.mapmatcher.core.Main;
 import fr.ign.cogit.mapmatcher.core.MapMatching;
+import fr.ign.cogit.mapmatcher.core.Track;
 import fr.ign.cogit.mapmatcher.util.Loaders;
 import fr.ign.cogit.mapmatcher.util.Parameters;
 import fr.ign.cogit.mapmatcher.util.Tools;
@@ -218,6 +219,7 @@ public class Interface {
 	private JLabel lblNumberOfFiles;
 	private JLabel lblOutputSuffix;
 
+	private Label label_2; 
 	private Label label_18;
 	private Label label_23;
 	private Label label_24;
@@ -419,13 +421,43 @@ public class Interface {
 	// -------------------------------------------------------------------------------
 	private void fillTrackComboBoxes(){
 
+		if (textField_1.getText().endsWith(".gpx")){
+
+			choice_7.setEnabled(false);
+
+			checkBox.setEnabled(false);
+
+			label_2.setEnabled(false);
+			textField_3.setEnabled(false);
+
+
+		}
+		else{
+
+			choice_5.setEnabled(true);
+			choice_6.setEnabled(true);
+			choice_7.setEnabled(true);
+
+			checkBox.setEnabled(true);
+
+			label_2.setEnabled(true);
+			textField_3.setEnabled(true);
+
+		}
+
 		choice_5.removeAllItems();
 		choice_6.removeAllItems();
 		choice_7.removeAllItems();
 
+
 		Parameters.input_track_path = textField_1.getText();
 
+		if (Parameters.input_track_path.trim().equals("")){
+			return;
+		}
+		
 		Parameters.readMultipleFiles();
+
 
 		if (Parameters.input_track_path_list.size() == 0){
 
@@ -505,6 +537,19 @@ public class Interface {
 
 		lblNumberOfFiles.setText("Number of files to print :  "+computeNumberOfFilesToPrint());
 
+
+		if (textField_1.getText().endsWith(".gpx")){
+
+			choice_5.addItem(" ");
+			choice_6.addItem(" ");
+
+			choice_5.setSelectedItem(" ");
+			choice_6.setSelectedItem(" ");
+
+			choice_5.setEnabled(false);
+			choice_6.setEnabled(false);
+
+		}
 
 
 	}
@@ -880,7 +925,7 @@ public class Interface {
 		label_1.setBounds(355, 96, 20, 22);
 		panel.add(label_1);
 
-		final Label label_2 = new Label("Sensor error code :");
+		label_2 = new Label("Sensor error code :");
 		label_2.setBounds(205, 252, 105, 22);
 		panel.add(label_2);
 
@@ -995,7 +1040,7 @@ public class Interface {
 		panel.add(chckbxRemoveDegree);
 
 		Font font = new Font("Arial Unicode MS", Font.PLAIN, 23);
-		
+
 		button_5 = new JButton("\u25CB");
 		button_5.setFont(font);
 		button_5.setMargin(new Insets(0,0,0,0));
@@ -1004,7 +1049,7 @@ public class Interface {
 
 		button_1 = new JButton("\u25CB");
 		button_1.setFont(font);
-		
+
 		button_1.setMargin(new Insets(0, 0, 0, 0));
 		button_1.setBounds(350, 220, 30, 25);
 		panel.add(button_1);
@@ -1319,7 +1364,7 @@ public class Interface {
 		// Test if getnet.jar is available
 		// --------------------------------------------------------------------------------------
 		File file_getnet_jar = new File("getnet/getnet.jar");
-		
+
 		if (file_getnet_jar.isFile()){
 
 			getFromMap = new JButton("BD TOPO");
@@ -1330,37 +1375,37 @@ public class Interface {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					
+
 					String proxy = "";
 					String key = "";
-					
+
 					File file_key = new File("getnet/key.dat");
-					
+
 					if (file_key.isFile()){
-						
+
 						try {
-							
+
 							@SuppressWarnings("resource")
 							Scanner scan = new Scanner(file_key);
 							key = " "+scan.nextLine();
-							
+
 							if (scan.hasNextLine()){
 								StringTokenizer st = new StringTokenizer(scan.nextLine(),":");
 								proxy = " -Dhttp.proxyHost="+st.nextToken(":")+" -Dhttp.proxyPort="+st.nextToken(":");
 							}
-							
+
 						} catch (FileNotFoundException e1) {
-							
+
 							e1.printStackTrace();
 						}
-						
+
 					}
 
 					try {
-						
+
 						String cmd = "java"+proxy+" -jar getnet/getnet.jar"+key;
 						Runtime.getRuntime().exec(cmd);
-						
+
 					} catch (IOException e1) {
 						e1.printStackTrace();
 					}
@@ -1759,7 +1804,7 @@ public class Interface {
 		btnCompute.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
-
+				
 				Loaders.setBufferNull();
 				Tools.progressPercentage(0, 100, true);
 
@@ -1788,6 +1833,7 @@ public class Interface {
 					Parameters.input_track_path = textField_1.getText();
 
 				}
+
 
 				if (textField_4.getText().equals("")){
 
@@ -1978,7 +2024,6 @@ public class Interface {
 
 				Parameters.failure_skip = chckbxSkipUnsolvedPoints.isSelected();
 				Parameters.precompute_distances = chckbxPrecomputeDistancesOn.isSelected();
-				Parameters.project_coordinates = checkBox_2.isSelected();
 				Parameters.sort_nodes = chckbxReorganizeLabelsOn.isSelected();
 
 				if (comboBox.getSelectedItem().equals(" source node (m)")){Parameters.abs_curv_type = "from_source_m";}
@@ -2065,6 +2110,37 @@ public class Interface {
 
 				}
 
+				// -----------------------------------------------------------
+				// Test coordinates system
+				// -----------------------------------------------------------
+				Loaders.parameterize();
+				Track track = Loaders.loadTrack(Parameters.input_track_path_list.get(0));
+				double x = track.getX().get(0);
+				double y = track.getY().get(0);
+				
+				boolean wgs84_probable = Parameters.input_track_path.endsWith(".gpx");
+				wgs84_probable = wgs84_probable || ((x >= -180) && (x <= 180) && (y >= -90) && (x <= 90));
+				
+				if (wgs84_probable && (!checkBox_2.isSelected())){
+
+					String message = "Point coordinates may be in geographic system (decimal degrees).\r\n";
+					message = message + "Do you want to convert them to planimetric system before map matching?";		
+
+					int rep = JOptionPane.showConfirmDialog(null, message, "Warning", JOptionPane.YES_NO_CANCEL_OPTION);
+
+					if (rep == JOptionPane.CANCEL_OPTION){
+						return;
+					}
+					else if(rep == JOptionPane.YES_OPTION){
+						checkBox_2.setSelected(true);
+					}
+
+				}
+				
+				Parameters.project_coordinates = checkBox_2.isSelected();
+				
+				// -----------------------------------------------------------
+				
 				Parameters.output_confidence = chckbxComputeEpochbyepochConfidence.isSelected();
 				Parameters.output_rmse = chckbxComputeEpochbyepochRmse.isSelected();
 				Parameters.add_spatial_index = chckbxStoreMapmatchedPoints.isSelected();
@@ -2082,6 +2158,7 @@ public class Interface {
 				Thread worker = new Thread() {
 					public void run() {
 
+						
 						final int code = MapMatching.executeAllProcessFromGUI();
 
 						SwingUtilities.invokeLater(new Runnable() {
