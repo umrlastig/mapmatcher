@@ -39,6 +39,7 @@ import fr.ign.cogit.mapmatcher.util.Loaders;
 import fr.ign.cogit.mapmatcher.util.Parameters;
 import fr.ign.cogit.mapmatcher.util.Project;
 import fr.ign.cogit.mapmatcher.util.Tools;
+import fr.ign.cogit.mapmatcher.util.Xml;
 
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Geometry;
@@ -473,7 +474,7 @@ public class MapMatching {
 							String file1 = output_folder+"\\index.xml";
 							String file2 = output_folder+"\\index"+num+".xml";
 							
-							Tools.mergeXml(file1, file2);
+							Xml.mergeXml(file1, file2);
 							
 						}
 						
