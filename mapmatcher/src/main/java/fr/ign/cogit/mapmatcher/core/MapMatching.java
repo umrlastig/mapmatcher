@@ -470,10 +470,10 @@ public class MapMatching {
 						
 						if (index_files_counter > 0){
 							
-							String file1 = output_folder+"\\index.xml";
-							String file2 = output_folder+"\\index"+num+".xml";
+						//	String file1 = output_folder+"\\index.xml";
+						//	String file2 = output_folder+"\\index"+num+".xml";
 							
-							Tools.mergeXml(file1, file2);
+						//	Tools.mergeXml(file1, file2);
 							
 						}
 						
