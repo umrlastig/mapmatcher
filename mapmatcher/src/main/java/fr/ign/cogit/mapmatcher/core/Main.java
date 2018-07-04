@@ -38,7 +38,7 @@ public class Main {
 	public static void main(String[] args){
 
 		// Remove arg
-		//args = new String[0];
+		args = new String[0];
 		
 		MapMatching.gui_mode = (args.length == 0);
 
