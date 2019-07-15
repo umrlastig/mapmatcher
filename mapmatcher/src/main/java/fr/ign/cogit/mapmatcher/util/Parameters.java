@@ -101,7 +101,7 @@ public class Parameters {
 	public static double computation_speed_limit = Double.MAX_VALUE;
 
 	// Computation options
-	public static boolean sort_nodes = false;
+	public static boolean sort_nodes = true;
 	public static boolean failure_skip = false;
 	public static boolean make_topology = false;
 
@@ -126,6 +126,7 @@ public class Parameters {
 	public static boolean output_confidence = false;
 	public static boolean output_index_all_edge = false;
 	public static boolean output_index_coords = false;
+	public static boolean output_path_interpolation = false;
 
 	public static boolean graphical_output = false;
 
@@ -259,14 +260,14 @@ public class Parameters {
 			if (name.equals("track.header"))           {track_header = Boolean.parseBoolean(value);}
 			if (name.equals("network.header"))         {network_header = Boolean.parseBoolean(value);}
 
-			if (name.equals("computation.sigma"))     		  {computation_sigma = Double.parseDouble(value);}
-			if (name.equals("computation.beta"))       		  {computation_beta = Double.parseDouble(value);}
-			if (name.equals("computation.radius"))     		  {computation_radius = Double.parseDouble(value);}
-			if (name.equals("computation.transition")) 		  {computation_transition = Double.parseDouble(value);}
-			if (name.equals("computation.limit.speed"))		  {computation_speed_limit = Double.parseDouble(value);}
-			if (name.equals("computation.autocorrelation"))   {computation_autocorrelation = Double.parseDouble(value);}
-			if (name.equals("computation.scope"))             {computation_scope = Double.parseDouble(value);}
-			if (name.equals("computation.angle"))             {computation_angle = Double.parseDouble(value);}
+			if (name.equals("computation.sigma"))     		      {computation_sigma = Double.parseDouble(value);}
+			if (name.equals("computation.beta"))       		      {computation_beta = Double.parseDouble(value);}
+			if (name.equals("computation.radius"))     		      {computation_radius = Double.parseDouble(value);}
+			if (name.equals("computation.transition")) 		      {computation_transition = Double.parseDouble(value);}
+			if (name.equals("computation.limit.speed"))		      {computation_speed_limit = Double.parseDouble(value);}
+			if (name.equals("computation.autocorrelation"))       {computation_autocorrelation = Double.parseDouble(value);}
+			if (name.equals("computation.autocorrelation.scope")) {computation_scope = Double.parseDouble(value);}
+			if (name.equals("computation.angle"))                 {computation_angle = Double.parseDouble(value);}
 
 			if (name.equals("computation.distribution"))	  {
 
@@ -288,6 +289,7 @@ public class Parameters {
 			if (name.equals("option.ref.network"))			  {ref_to_network = Boolean.parseBoolean(value);}
 			if (name.equals("output.index.all.edge"))	      {output_index_all_edge =  Boolean.parseBoolean(value);}
 			if (name.equals("output.index.coords"))	          {output_index_coords =  Boolean.parseBoolean(value);}
+			if (name.equals("output.path.interpolation"))	  {output_path_interpolation =  Boolean.parseBoolean(value);}
 
 			if (name.equals("option.rmse.type"))			  {rmse_type_before = value.equals("before");}
 			if (name.equals("output.index.format"))			  {index_format_csv = value.equals("csv");}
@@ -631,7 +633,7 @@ public class Parameters {
 			writer_param.write("computation.transition = "+computation_transition+"\r\n");
 			writer_param.write("computation.limit.speed = "+computation_speed_limit+"\r\n");
 			writer_param.write("computation.autocorrelation = "+computation_autocorrelation+"\r\n");
-			writer_param.write("computation.scope = "+computation_scope+"\r\n");
+			writer_param.write("computation.autocorrelation.scope = "+computation_scope+"\r\n");
 			writer_param.write("computation.angle = "+computation_angle+"\r\n");
 
 
@@ -679,6 +681,9 @@ public class Parameters {
 			writer_param.write("output.confidence = "+output_confidence+"\r\n");
 			writer_param.write("output.index.all.edge = "+output_index_all_edge+"\r\n");
 			writer_param.write("output.index.coords = "+output_index_coords+"\r\n");
+			writer_param.write("output.path.interpolation = "+output_path_interpolation+"\r\n");
+			
+			
 
 			if (index_format_csv){
 
@@ -817,6 +822,7 @@ public class Parameters {
 		Parameters.output_index_all_edge = false;
 		Parameters.output_index_coords = false;
 		Parameters.network_inaccuracies = false;
+		Parameters.output_path_interpolation = false;
 
 		Parameters.buffer_radius = 300;
 		Parameters.distance_buffer = "full_network";

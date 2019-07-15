@@ -60,6 +60,7 @@ public class Loaders {
 	private static ArrayList<Geometry> GEOMS;
 	private static Hashtable<String, ArrayList<String>> NODES;
 	private static Hashtable<String,Integer> EDGES;
+	private static Hashtable<String,Integer> EDGE_INDICES;
 	private static ArrayList<String> EDGE_NAMES;
 	private static ArrayList<Integer> ONE_WAY;
 
@@ -597,6 +598,7 @@ public class Loaders {
 		GEOMS = new ArrayList<Geometry>();
 		NODES = new Hashtable<String, ArrayList<String>>();
 		EDGES = new Hashtable<String, Integer>();
+		EDGE_INDICES = new Hashtable<String, Integer>();
 		EDGE_NAMES = new ArrayList<String>();
 		ONE_WAY =  new ArrayList<Integer>();
 
@@ -832,7 +834,7 @@ public class Loaders {
 				else{
 
 					EDGE_NAMES.add(values[edge_id]);
-					EDGE_ID_NAMES.put(values[edge_id], 0);
+					EDGE_ID_NAMES.put(values[edge_id], EDGE_NAMES.size());
 
 				}
 
@@ -929,7 +931,8 @@ public class Loaders {
 		NETWORK.setNodeNumber(nodeNumber);
 		NETWORK.setVerticeNumber(verticeNumber);
 
-
+		NETWORK.setEdgeIndices(EDGE_ID_NAMES);
+		
 		// -------------------------------------------
 		// Build topology
 		// -------------------------------------------

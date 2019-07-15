@@ -73,9 +73,9 @@ public class MapMatching {
 
 	private static int UNSOLVED_POINT = -999999999;
 	// -------------------------------------------------------------------
-	
+
 	public static int INDEX_BATCH_SIZE = 30000;
-	
+
 	// -------------------------------------------------------------------
 
 	private static ArrayList<ArrayList<Double>> CANDIDATES_D;
@@ -102,8 +102,9 @@ public class MapMatching {
 
 	public static ArrayList<Double> getDisplacementX(){return DISPLACEMENTS_X;}
 	public static ArrayList<Double> getDisplacementY(){return DISPLACEMENTS_Y;}
-
-
+	
+	private static ArrayList<Double> BETA_COMPUTATION_DATA = new ArrayList<Double>();
+	
 	private static int distancePrecompTime = 0;
 	private static int mapMatchTime = 0;
 	private static int noCandidate = 0;
@@ -176,6 +177,8 @@ public class MapMatching {
 			Tools.progressPercentage(input_tracks.size(), input_tracks.size(), MapMatching.gui_mode);
 
 		}
+		
+		Tools.progressPercentage(0, input_tracks.size(), MapMatching.gui_mode);
 
 
 		// Loading and preparing network data
@@ -450,7 +453,7 @@ public class MapMatching {
 			// Output index (step by step if necessary)
 			// ----------------------------------------------------------
 			if (Parameters.add_spatial_index){
-				
+
 				if ((i % INDEX_BATCH_SIZE == INDEX_BATCH_SIZE-1) || (i == input_tracks.size()-1)){
 
 					String num = "";
@@ -461,30 +464,30 @@ public class MapMatching {
 
 
 					if (Parameters.index_format_csv){
-						
+
 						network.printIndex(output_folder+"\\index"+num+".csv");
-						
+
 					}else{
-						
+
 						network.printIndexInXml(output_folder+"\\index"+num+".xml");
-						
+
 						if (index_files_counter > 0){
-							
-						//	String file1 = output_folder+"\\index.xml";
-						//	String file2 = output_folder+"\\index"+num+".xml";
-							
-						//	Tools.mergeXml(file1, file2);
-							
+
+							//	String file1 = output_folder+"\\index.xml";
+							//	String file2 = output_folder+"\\index"+num+".xml";
+
+							//	Tools.mergeXml(file1, file2);
+
 						}
-						
+
 					}
 
 					network.makeSystem();
-					
+
 					index_files_counter ++;
 
 				}
-				
+
 			}
 
 		}
@@ -494,7 +497,6 @@ public class MapMatching {
 		// ---------------------------------------------------------------------
 
 		if (MapMatching.gui_mode){
-
 
 			Main.gui.graphics.plot();	
 
@@ -623,6 +625,7 @@ public class MapMatching {
 	// -------------------------------------------------------------------
 	// Module for map-matching a track on a network
 	// -------------------------------------------------------------------
+	@SuppressWarnings("static-access")
 	public static void execute(Track track, String outputPath){
 
 		PrintWriter writer = null;
@@ -807,7 +810,7 @@ public class MapMatching {
 			// --------------------------------------------------------------
 
 			double cut = computeCutDistance(CANDIDATES, PREP_GEOMS, buffer, x, y);
-			
+
 			// --------------------------------------------------------------
 			// Running through candidates
 			// --------------------------------------------------------------
@@ -1123,8 +1126,11 @@ public class MapMatching {
 					// --------------------------------------------------------------
 
 					double l0 = c1.distance(c2);
-
-
+					
+					//Coordinate p1 = new Coordinate(track.getX().get(i-1), track.getY().get(i-1));
+					//Coordinate p2 = new Coordinate(track.getY().get(i), track.getY().get(i));
+					//l0 = p1.distance(p2);
+					
 					// --------------------------------------------------------------
 					// Distance between candidates and edges
 					// --------------------------------------------------------------
@@ -1237,6 +1243,7 @@ public class MapMatching {
 						if (MapMatching.gui_mode){
 
 							Tools.printError("Error: two consecutive points with same timestamp for track "+track.getPath());
+							Main.gui.reactivateComputeButton();
 							return;
 
 						}
@@ -1248,7 +1255,6 @@ public class MapMatching {
 						}
 
 					}
-
 
 					// --------------------------------------------------------------
 					// Adding link to Hidden Markov Model
@@ -1471,6 +1477,8 @@ public class MapMatching {
 
 		Integer l = null;
 		int shift = 0;
+
+		ArrayList<String> LIST_OF_EDGES_IN_TRACK = new ArrayList<String>();
 
 		for (int i=1; i<path.size(); i++){
 
@@ -1741,6 +1749,16 @@ public class MapMatching {
 
 			output.append(link_name);    output.append(output_delimiter);
 
+			// Add edge name without replication
+			if (LIST_OF_EDGES_IN_TRACK.size() == 0){
+				LIST_OF_EDGES_IN_TRACK.add(link_name);
+			}else{
+				if (!LIST_OF_EDGES_IN_TRACK.get(LIST_OF_EDGES_IN_TRACK.size()-1).equals(link_name)){
+					LIST_OF_EDGES_IN_TRACK.add(link_name);
+				}
+			}
+
+
 			if (Parameters.ref_to_network){
 
 				// Sorting nodes test
@@ -1785,6 +1803,148 @@ public class MapMatching {
 			// ---------------------------------------------------------------------
 
 		}
+
+		// ---------------------------------------------------------------------
+		// Path reconstruction
+		// ---------------------------------------------------------------------
+
+		if (Parameters.output_path_interpolation){
+
+			PrintWriter interpolated_track_writer = null;
+
+			StringTokenizer st = new StringTokenizer(outputPath,".");
+			st.nextToken("/");
+			String outputName = st.nextToken("/");
+			outputName = outputName.substring(0, outputName.length()-4)+"_interp.dat";
+
+			try {
+				interpolated_track_writer = new PrintWriter(new File(Parameters.output_path+"/"+outputName+""));
+				interpolated_track_writer.println("id_edge_start,id_edge_end,nb_edges,ratio,edges");
+			} catch (FileNotFoundException e1) {
+				e1.printStackTrace();
+			}
+
+			if (LIST_OF_EDGES_IN_TRACK.size() > 1){
+				for (int e=0; e<LIST_OF_EDGES_IN_TRACK.size()-1; e++){
+					
+					String id_edge1 = LIST_OF_EDGES_IN_TRACK.get(e);
+					String id_edge2 = LIST_OF_EDGES_IN_TRACK.get(e+1);
+					
+					//String id_node11 = network.getSources().get(network.getEdgeIndices().get(id_edge1));
+					//String id_node21 = network.getSources().get(network.getEdgeIndices().get(id_edge2));
+					//String id_node12 = network.getTargets().get(network.getEdgeIndices().get(id_edge1));
+					//String id_node22 = network.getTargets().get(network.getEdgeIndices().get(id_edge2));
+					
+					String id_node11 = network.getSources().get(Integer.parseInt(id_edge1)-1);
+					String id_node21 = network.getSources().get(Integer.parseInt(id_edge2)-1);
+					String id_node12 = network.getTargets().get(Integer.parseInt(id_edge1)-1);
+					String id_node22 = network.getTargets().get(Integer.parseInt(id_edge2)-1);
+
+					Geometry g1 = network.getGeometries().get(Integer.parseInt(id_edge1)-1);
+					Geometry g2 = network.getGeometries().get(Integer.parseInt(id_edge2)-1);
+					
+					//Geometry g1 = network.getGeometries().get(network.getEdgeIndices().get(id_edge1));
+					//Geometry g2 = network.getGeometries().get(network.getEdgeIndices().get(id_edge2));
+
+					double distance = g1.distance(g2);
+
+					ArrayList<Integer> PATH = null;
+
+					double d1 = Double.MAX_VALUE;
+					double d2 = Double.MAX_VALUE;
+					double d3 = Double.MAX_VALUE;
+					double d4 = Double.MAX_VALUE;
+
+					ArrayList<Integer> PATH1 = null;
+					ArrayList<Integer> PATH2 = null;
+					ArrayList<Integer> PATH3 = null;
+					ArrayList<Integer> PATH4 = null;
+
+					network.dijkstra(id_node11, id_node21);
+					d1 = network.getPathLength(id_node21);
+					PATH1 = network.getPathEdges(id_node21);
+
+					if (d1 != 0) {
+
+						d2 = network.getPathLength(id_node22);
+						if (d2 == Integer.MAX_VALUE) {
+							network.dijkstra(id_node11, id_node22);
+							d2 = network.getPathLength(id_node22);
+						}
+						PATH2 = network.getPathEdges(id_node22);
+
+						if (d2 != 0) {
+
+							network.dijkstra(id_node12, id_node21);
+							d3 = network.getPathLength(id_node21);
+							PATH3 = network.getPathEdges(id_node21);
+
+							if (d3 != 0) {
+
+								d4 = network.getPathLength(id_node22);
+								if (d4 == Integer.MAX_VALUE) {
+									network.dijkstra(id_node12, id_node22);
+									d4 = network.getPathLength(id_node22);
+								}
+								PATH4 = network.getPathEdges(id_node22);
+
+							}
+
+						}
+
+					}
+
+					double dpath = 0; 
+
+					if ((d1 <= d2) && (d1 <= d3) && (d1 <= d4)) {
+						PATH = PATH1;
+						dpath = d1;
+					}
+
+					if ((d2 <= d1) && (d2 <= d3) && (d2 <= d4)) {
+						PATH = PATH2;
+						dpath = d2;
+					}
+
+					if ((d3 <= d1) && (d3 <= d2) && (d3 <= d4)) {
+						PATH = PATH3;
+						dpath = d3;
+					}
+
+					if ((d4 <= d1) && (d4 <= d2) && (d4 <= d3)) {
+						PATH = PATH4;
+						dpath = d4;
+					}
+
+					double k = 0;
+					if (dpath != Integer.MAX_VALUE) {
+						if (dpath == 0){
+							k = 1;
+						}else{
+							k = dpath/distance;
+						}
+					}else {
+						k = Double.MAX_VALUE;
+					}
+
+					interpolated_track_writer.print(id_edge1+","+id_edge2+","+PATH.size()+","+k+",");
+					interpolated_track_writer.print("\"{"+(id_edge1));
+					for (int i=0; i<PATH.size(); i++) {
+						interpolated_track_writer.print(";"+(PATH.get(i)+1));
+					}
+					interpolated_track_writer.println("}\"");
+
+				}
+			}else{
+				// Empty file
+			}
+
+			interpolated_track_writer.close();
+
+		}
+
+		// ---------------------------------------------------------------------
+
 
 		writer.close();
 
@@ -1847,9 +2007,9 @@ public class MapMatching {
 			if (Parameters.project_coordinates){
 				track_mm.toLocalMercator();	
 			}
-			
+
 			Main.gui.graphics.addTrackMm(track_mm);
-			
+
 
 		}
 
@@ -1989,6 +2149,7 @@ public class MapMatching {
 			double transition = Parameters.computation_transition;
 			double exp = Tools.round(rmse, 2);
 			double sigma_posterior = Tools.round(1.4826*mad, 2);
+		//	double beta_posterior = Tools.median(BETA_COMPUTATION_DATA)/Math.log(2);
 
 			rmse = Tools.round(Math.sqrt(2)*rmse, 2);
 
@@ -2125,6 +2286,9 @@ public class MapMatching {
 			writer_report.print("--------------------------------------------------------------------------\r\n");
 			writer_report.print("Median absolute deviation = "+mad+" m"+"\r\n");
 			writer_report.print("Sigma posterior estimate = "+sigma_posterior+" m"+"\r\n");
+			//writer_report.print("Beta posterior estimate = "+beta_posterior+" m"+"\r\n");
+
+			
 			writer_report.print("--------------------------------------------------------------------------\r\n");
 			writer_report.print("* Timing\r\n");
 			writer_report.print("Distances precomputation time = "+distancePrecompTimeDouble+" s"+"\r\n");

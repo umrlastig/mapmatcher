@@ -33,7 +33,7 @@ import fr.ign.cogit.mapmatcher.util.Tools;
 public class Main {
 
 	public static Interface gui;
-	public static ImageIcon img = new ImageIcon("resources\\grenouille-couleur.jpg");
+	public static ImageIcon img = new ImageIcon("resources\\fourmi1a2.png");
 
 	public static void main(String[] args){
 

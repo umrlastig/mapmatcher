@@ -195,6 +195,7 @@ public class Interface {
 	private JCheckBox chckbxSpatiotemporalAutocorrelationBetween;
 	private JCheckBox chckbxKeepSensorError;
 	private JCheckBox chckbxCleanDirectory;
+	private JCheckBox chckbxInterpolation;
 
 
 	private JCheckBox chckbxComputeEpochbyepochConfidence;
@@ -455,7 +456,7 @@ public class Interface {
 		if (Parameters.input_track_path.trim().equals("")){
 			return;
 		}
-		
+
 		Parameters.readMultipleFiles();
 
 
@@ -602,13 +603,34 @@ public class Interface {
 					textArea_1.append(name.replace("/", "\\")+"\r\n");
 				}
 
-				if (i > 400){
+				if (i > 100){
 					textArea_1.append((Parameters.input_track_path_list.size()-i+1)+" other output track file(s)...\r\n");
 					break;
 				}
 
 			}
+			
+			if (chckbxInterpolation.isSelected()){
+				
+				output +=  Parameters.input_track_path_list.size();
 
+				for (int i=0; i<Parameters.input_track_path_list.size(); i++){
+
+					String name = textField_4.getText()+MapMatching.makeOutputName(Parameters.input_track_path_list.get(i));
+					name = name.substring(0,name.length()-4) + "_interp.dat";
+
+					if (textArea_1.isEnabled()){
+						textArea_1.append(name.replace("/", "\\")+"\r\n");
+					}
+
+					if (i > 100){
+						textArea_1.append((Parameters.input_track_path_list.size()-i+1)+" other interpolation file(s)...\r\n");
+						break;
+					}
+
+				}
+				
+			}
 
 		} 
 
@@ -1143,10 +1165,15 @@ public class Interface {
 		btnPrevious.setBounds(25, 384, 89, 25);
 		panel_1.add(btnPrevious);
 
-		chckbxKeepSensorError = new JCheckBox("Keep sensor error records in output");
+		chckbxKeepSensorError = new JCheckBox("Keep sensor errors");
 		chckbxKeepSensorError.setSelected(true);
-		chckbxKeepSensorError.setBounds(22, 95, 206, 23);
+		chckbxKeepSensorError.setBounds(22, 95, 120, 23);
 		panel_1.add(chckbxKeepSensorError);
+
+		chckbxInterpolation = new JCheckBox("Print interpolation");
+		chckbxInterpolation.setSelected(false);
+		chckbxInterpolation.setBounds(149, 95, 130, 23);
+		panel_1.add(chckbxInterpolation);
 
 		textField_12 = new JTextField();
 		textField_12.setColumns(10);
@@ -1161,12 +1188,12 @@ public class Interface {
 		txtmmdat.setHorizontalAlignment(SwingConstants.CENTER);
 		txtmmdat.setText("_mm.dat");
 		txtmmdat.setColumns(10);
-		txtmmdat.setBounds(272, 95, 78, 20);
+		txtmmdat.setBounds(287, 95, 78, 20);
 		panel_1.add(txtmmdat);
 
 		lblOutputSuffix = new JLabel("Output suffix");
 		lblOutputSuffix.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		lblOutputSuffix.setBounds(277, 70, 74, 20);
+		lblOutputSuffix.setBounds(292, 70, 74, 20);
 		panel_1.add(lblOutputSuffix);
 
 		lblNumberOfFiles = new JLabel("Number of files to print :  1");
@@ -1326,6 +1353,7 @@ public class Interface {
 		panel_2.add(label_20);
 
 		chckbxReorganizeLabelsOn = new JCheckBox("Reorganize labels on post-processing");
+		chckbxReorganizeLabelsOn.setSelected(true);
 		chckbxReorganizeLabelsOn.setBounds(22, 285, 222, 23);
 		panel_2.add(chckbxReorganizeLabelsOn);
 
@@ -1804,7 +1832,7 @@ public class Interface {
 		btnCompute.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
-				
+
 				Loaders.setBufferNull();
 				Tools.progressPercentage(0, 100, true);
 
@@ -1864,6 +1892,7 @@ public class Interface {
 
 				Parameters.output_clear = chckbxCleanDirectory.isSelected();
 				Parameters.output_errors = chckbxKeepSensorError.isSelected();
+				Parameters.output_path_interpolation = chckbxInterpolation.isSelected();
 				MapMatching.open_report = chckbxOpenReportFile.isSelected();
 
 				Parameters.buffer_radius = Double.parseDouble(textField_18.getText());
@@ -2111,16 +2140,50 @@ public class Interface {
 				}
 
 				// -----------------------------------------------------------
+				// Test compatibility between sort_nodes and interpolation
+				// -----------------------------------------------------------
+				if ((!Parameters.sort_nodes) && (Parameters.output_path_interpolation)){
+
+					String message = "Interpolating path between GPS points requires to reorganize node labels after processing.\r\n";
+					message = message + "Do you want to activate this option?";		
+
+					int rep = JOptionPane.showConfirmDialog(null, message, "Warning", JOptionPane.YES_NO_CANCEL_OPTION);
+
+					if (rep == JOptionPane.CANCEL_OPTION){
+						return;
+					}
+					else if(rep == JOptionPane.YES_OPTION){
+						chckbxReorganizeLabelsOn.setSelected(true);
+					}
+
+				}
+				
+				// -----------------------------------------------------------
+				// Test compatibility between interpolation and buffer
+				// -----------------------------------------------------------
+				if ((!Parameters.distance_buffer.equals("full_network")) && (Parameters.output_path_interpolation)){
+
+					String message = "Cannot return interpolated path when buffer optimization is activated.\r\n";
+
+					JOptionPane.showMessageDialog(null, message, "Warning", JOptionPane.WARNING_MESSAGE);
+		
+					chckbxInterpolation.setSelected(false);
+					Parameters.output_path_interpolation = false;
+
+				}
+
+				// -----------------------------------------------------------
 				// Test coordinates system
 				// -----------------------------------------------------------
 				Loaders.parameterize();
 				Track track = Loaders.loadTrack(Parameters.input_track_path_list.get(0));
+
 				double x = track.getX().get(0);
 				double y = track.getY().get(0);
-				
+
 				boolean wgs84_probable = Parameters.input_track_path.endsWith(".gpx");
 				wgs84_probable = wgs84_probable || ((x >= -180) && (x <= 180) && (y >= -90) && (x <= 90));
-				
+
 				if (wgs84_probable && (!checkBox_2.isSelected())){
 
 					String message = "Point coordinates may be in geographic system (decimal degrees).\r\n";
@@ -2136,11 +2199,11 @@ public class Interface {
 					}
 
 				}
-				
+
 				Parameters.project_coordinates = checkBox_2.isSelected();
-				
+
 				// -----------------------------------------------------------
-				
+
 				Parameters.output_confidence = chckbxComputeEpochbyepochConfidence.isSelected();
 				Parameters.output_rmse = chckbxComputeEpochbyepochRmse.isSelected();
 				Parameters.add_spatial_index = chckbxStoreMapmatchedPoints.isSelected();
@@ -2158,7 +2221,7 @@ public class Interface {
 				Thread worker = new Thread() {
 					public void run() {
 
-						
+
 						final int code = MapMatching.executeAllProcessFromGUI();
 
 						SwingUtilities.invokeLater(new Runnable() {
@@ -2399,13 +2462,11 @@ public class Interface {
 		btnHelp.setBounds(290, 384, 89, 25);
 		panel_3.add(btnHelp);
 
-		chckbxActivateHelp = new JCheckBox("Activate help");
+		chckbxActivateHelp = new JCheckBox("Activate tool tips");
 		chckbxActivateHelp.setBackground(Color.WHITE);
 		chckbxActivateHelp.setBounds(23, 385, 112, 23);
 		chckbxActivateHelp.setSelected(true);
 		panel_3.add(chckbxActivateHelp);
-
-
 
 
 		// ---------------------------------------------------------------------------------------
@@ -2818,6 +2879,16 @@ public class Interface {
 
 				textField_12.setEnabled(chckbxPrintReportFile.isSelected());
 				button_8.setEnabled(chckbxPrintReportFile.isSelected());
+
+			}
+		});
+
+		// Output path interpolation check box
+		chckbxInterpolation.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent e) {
+
+				lblNumberOfFiles.setText("Number of files to print :  "+computeNumberOfFilesToPrint());
 
 			}
 		});
@@ -3324,6 +3395,7 @@ public class Interface {
 					chckbxLimitNumberOf.setSelected(Parameters.max_number_candidates != -1);
 					chckbxLimitSpeedBetween.setSelected(Parameters.computation_speed_limit != Double.MAX_VALUE);
 					chckbxSpatiotemporalAutocorrelationBetween.setSelected(Parameters.computation_autocorrelation != 0.0);
+					chckbxInterpolation.setSelected(Parameters.output_path_interpolation);
 
 					chckbxComputeEpochbyepochRmse.setSelected(Parameters.output_rmse);
 					chckbxComputeEpochbyepochConfidence.setSelected(Parameters.output_confidence);
@@ -3545,7 +3617,7 @@ public class Interface {
 			chckbxSpatiotemporalAutocorrelationBetween.setToolTipText("Check this box to account for position covariance between successive points");
 			slider.setToolTipText("Correlation between successive points");
 			textField_5.setToolTipText("Autocorrelation variogram scope (in input coordinate units)");
-			chckbxPrecomputeDistancesOn.setToolTipText("Precompute network shortest paths to optimize runnnig time (adviced if the number of tracks to process is big)");
+			chckbxPrecomputeDistancesOn.setToolTipText("Precompute network shortest paths to optimize runnnig time (adviced if the number of tracks to process is large)");
 			chckbxLimitNumberOf.setToolTipText("Set a maximal number of map-matched candidate points to account for at each epoch");
 			spinner.setToolTipText("Set a maximal number of map-matched candidate points to account for at each point");
 			chckbxLimitSpeedBetween.setToolTipText("Set a maximal speed of vehicle between any couple of successive points");
@@ -3573,6 +3645,8 @@ public class Interface {
 			chckbxPrintPointsCoordinates.setToolTipText("Output point coordinates in index");
 			chckbxActivateHelp.setToolTipText("Uncheck to hide help tooltip texts");
 			btnHelp.setToolTipText("Open read me file in notepad");
+			chckbxGraphicalOutput.setToolTipText("Plot complete network graph even when buffer has been precomputed");
+			chckbxInterpolation.setToolTipText("Output interpolation path between map-matched points");
 
 
 		}else{
@@ -3660,11 +3734,12 @@ public class Interface {
 			chckbxPrintPointsCoordinates.setToolTipText("");
 			chckbxActivateHelp.setToolTipText("");
 			btnHelp.setToolTipText("");
+			chckbxGraphicalOutput.setText("");
+			chckbxInterpolation.setToolTipText("");
 
 		}
 
 	}
-
 
 }
 

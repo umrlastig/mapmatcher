@@ -44,6 +44,7 @@ public class Network {
 	private ArrayList<Geometry> GEOMS;
 	private Hashtable<String, ArrayList<String>> NODES;
 	private Hashtable<String, Integer> EDGES;
+	private Hashtable<String, Integer> EDGE_INDICES;
 	private ArrayList<String> EDGE_NAMES;
 	private ArrayList<Integer> ONE_WAY;
 
@@ -83,6 +84,7 @@ public class Network {
 	public ArrayList<Geometry> getGeometries(){return GEOMS;}
 	public Hashtable<String, ArrayList<String>> getNodes(){return NODES;}
 	public Hashtable<String, Integer> getEdges(){return EDGES;}
+	public Hashtable<String, Integer> getEdgeIndices(){return EDGE_INDICES;}
 	public ArrayList<String> getEdgeNames(){return EDGE_NAMES;}
 	public ArrayList<Integer> getOneWay(){return ONE_WAY;}
 
@@ -97,6 +99,7 @@ public class Network {
 	public void setNodes(Hashtable<String, ArrayList<String>> N){NODES = N;}
 	public void setEdges(Hashtable<String, Integer> E){EDGES = E;}
 	public void setEdgeNames(ArrayList<String> EN){EDGE_NAMES = EN;}
+	public void setEdgeIndices(Hashtable<String, Integer> E){EDGE_INDICES = E;}
 	public void setOneWay(ArrayList<Integer> OW){ONE_WAY = OW;}
 
 	public void makeSystem(){
@@ -150,6 +153,7 @@ public class Network {
 		NODES = new Hashtable<String, ArrayList<String>>();
 		EDGES = new Hashtable<String, Integer>();
 		EDGE_NAMES = new ArrayList<String>();
+		EDGE_INDICES = new Hashtable<String, Integer>();
 		ONE_WAY = new ArrayList<Integer>();
 
 	}
@@ -635,8 +639,8 @@ public class Network {
         // ----------------------------------------------
 
 
-        int change = n/Tools.maxBareSize;
-
+        int change = Math.max(n/Tools.maxBareSize,1);
+       
         for (int i=0; i<n; i++){
 
             dijkstra(KEYS.get(i), Parameters.buffer_radius);
@@ -1212,9 +1216,10 @@ public class Network {
 
 			}
 			else{
-
-				nedge2 = EDGES.get(edge22);
-				EDGES.remove(edge22);
+				if (EDGES.containsKey(edge22)){
+					nedge2 = EDGES.get(edge22);
+					EDGES.remove(edge22);
+				}
 
 			}
 

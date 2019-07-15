@@ -746,6 +746,36 @@ public class Tools {
 	} 
 
 	// -------------------------------------------------------------------
+	// Median  of list X
+	// -------------------------------------------------------------------
+	public static double median(ArrayList<Double> X){
+
+		ArrayList<Double> values = new ArrayList<Double>();
+		
+		for (int i=0; i<X.size(); i++){
+			values.add(X.get(i));
+		}
+		
+		Collections.sort(values);
+
+		double median = 0;
+
+		if (values.size() % 2 == 0){
+
+			median = values.get(values.size()/2) +  values.get(values.size()/2+1);
+
+		}
+		else{
+
+			median = values.get(values.size()/2+1);
+
+		}
+
+		return median;
+
+	} 
+
+	// -------------------------------------------------------------------
 	// Median absolute deviation of lists X and Y
 	// -------------------------------------------------------------------
 	public static double mad(ArrayList<Double> X, ArrayList<Double> Y){
@@ -764,7 +794,7 @@ public class Tools {
 
 		if (values.size() % 2 == 0){
 
-			median = values.get(values.size()/2) +  values.get(values.size()/2+1);
+			median = values.get((values.size()-1)/2) + values.get(values.size()/2);
 
 		}
 		else{
@@ -1086,7 +1116,7 @@ public class Tools {
 			NodeList listEdgeToInsert = root1.getElementsByTagName("edge");
 
 			for (int j = 0; j < listEdgeToInsert.getLength(); j++) {
-				
+
 				Node nodeE = listEdgeToInsert.item(j);
 				if (nodeE instanceof Element) {
 					Element edgeNode = (Element)nodeE;
