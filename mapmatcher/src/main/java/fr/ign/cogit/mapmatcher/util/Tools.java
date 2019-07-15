@@ -762,12 +762,12 @@ public class Tools {
 
 		if (values.size() % 2 == 0){
 
-			median = values.get(values.size()/2) +  values.get(values.size()/2+1);
+			median = values.get(values.size()/2-1) +  values.get(values.size()/2);
 
 		}
 		else{
 
-			median = values.get(values.size()/2+1);
+			median = values.get((values.size()-1)/2);
 
 		}
 
