@@ -16,31 +16,15 @@ import java.awt.Color;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
 import java.util.Scanner;
-import java.util.TreeMap;
 
 import javax.swing.JOptionPane;
-import java.util.Map.Entry;
 
 import fr.ign.cogit.mapmatcher.network.Network;
 
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryFactory;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.transform.OutputKeys;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
-
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
 import fr.ign.cogit.mapmatcher.core.Main;
 import fr.ign.cogit.mapmatcher.core.MapMatching;
@@ -794,12 +778,12 @@ public class Tools {
 
 		if (values.size() % 2 == 0){
 
-			median = values.get((values.size()-1)/2) + values.get(values.size()/2);
+			median = values.get(values.size()/2-1) +  values.get(values.size()/2);
 
 		}
 		else{
 
-			median = values.get(values.size()/2+1);
+			median = values.get((values.size()-1)/2);
 
 		}
 
@@ -988,6 +972,7 @@ public class Tools {
 
 	}
 
+<<<<<<< HEAD
 	// ----------------------------------------------------------------------
 	// Method to merge index blocs
 	// ----------------------------------------------------------------------
@@ -1228,6 +1213,9 @@ public class Tools {
 		}
 
 	}
+=======
+	
+>>>>>>> 6b37f1860caaa43b41f6b0957fdef9bf7d52e679
 
 
 }

@@ -28,9 +28,9 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<geoserver.version>2.13.0</geoserver.version>
 		<geotools.version>17.3</geotools.version>
-		<!-- <path.geoserver>D:\MesProgrammes\GeoServer\GeoServer 2.12.0\webapps\geoserver\WEB-INF\lib</path.geoserver> -->
+		<path.geoserver>D:\MesProgrammes\GeoServer\GeoServer-2.13.0\webapps\geoserver\WEB-INF\lib</path.geoserver>
 		<!-- <path.geoserver>/home/mdvandamme/geoserver/geoserver-2.12.1/webapps/geoserver/WEB-INF/lib</path.geoserver> -->
-		<path.geoserver>D:\MesProgrammes\GeoServer\GeoServer-2.13.1\webapps\geoserver\WEB-INF\lib</path.geoserver>
+		<!-- <path.geoserver>D:\MesProgrammes\GeoServer\GeoServer-2.13.1\webapps\geoserver\WEB-INF\lib</path.geoserver> -->
 	</properties>
 
 	<build>
