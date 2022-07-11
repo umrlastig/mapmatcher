@@ -6,7 +6,7 @@ Le but de l’algorithme est de recaler des points d'observation sur un réseau.
 
 
 [![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
-[![CircleCI](https://img.shields.io/circleci/project/github/umrlastig/mapmatcher/main.svg?style=flat-square&label=CircleCI)](https://circleci.com/gh/umrlastig/mapmatcher)
+[![CircleCI](https://dl.circleci.com/status-badge/img/gh/umrlastig/mapmatcher/tree/master.svg?style=svg)](https://dl.circleci.com/status-badge/redirect/gh/umrlastig/mapmatcher/tree/master)
 [![Maven Central](https://img.shields.io/maven-central/v/fr.umr-lastig/mapmatcher.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%22fr.umr-lastig%22%20AND%20a:%22mapmatcher%22)
 [![Software License](https://img.shields.io/badge/Licence-Cecill--C-blue.svg?style=flat)](https://github.com/umrlastig/mapmatcher/blob/master/LICENSE)
 
