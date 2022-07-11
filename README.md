@@ -1,13 +1,12 @@
 
-
-
 Matching GPS traces with MapMatcher
-===================
+===================================
+
+Le but de l’algorithme est de recaler des points d'observation sur un réseau. Un cas classique consiste à recaler des points GPS d'une voiture sur un réseau routier. Il prend en entrée un jeu de traces GPS et un réseau linéaire et fournit en sortie les points GPS recalés sur le réseau.
 
 
-
-### Installation
-------------------------
+Installation
+--------------
 
 #### Option 1: 
 

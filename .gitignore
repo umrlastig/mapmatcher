@@ -3,3 +3,4 @@
 .gitignore
 .project
 target/
+release.properties
