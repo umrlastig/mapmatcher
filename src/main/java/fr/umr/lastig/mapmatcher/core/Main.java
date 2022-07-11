@@ -40,7 +40,7 @@ public class Main {
 		
 		MapMatching.gui_mode = (args.length == 0);
 
-		if (MapMatching.gui_mode){
+		if (MapMatching.gui_mode) {
 
 			executeInterface();
 

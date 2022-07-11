@@ -1,14 +1,43 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>fr.umr-lastig</groupId>
 	<artifactId>mapmatcher</artifactId>
-	<version>1.1-SNAPSHOT</version>
+	<version>1.2</version>
 
 	<name>Map-matcher</name>
 	<description>Map-matching of a track on a network with Hidden Markov Model. Based on popular Newson and Krumm paper</description>
+	
+	<url>https://github.com/umrlastig/mapmatcher</url>
+	
+	<organization>
+        <name>LaSTIG</name>
+        <url>https://www.umr-lastig.fr/</url>
+    </organization>
+    
+    
+    <licenses>
+        <license>
+            <name>CeCILL-C</name>
+            <url>http://www.cecill.info/</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+    
+    <scm>
+        <connection>scm:git:git://github.com/umrlastig/mapmatcher.git</connection>
+        <url>https://github.com/umrlastig/mapmatcher.git</url>
+    </scm>
+
+    <developers>
+        <developer>
+            <name>Yann Méneroux</name>
+        </developer>
+    </developers>
+    
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -41,17 +70,71 @@
 					<target>1.8</target>
 				</configuration>
 			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+				<version>2.2.1</version>
+				<executions>
+					<execution>
+						<id>attach-sources</id>
+						<goals>
+							<goal>jar-no-fork</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<version>2.9.1</version>
+				<executions>
+					<execution>
+						<id>attach-javadocs</id>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-gpg-plugin</artifactId>
+				<version>1.5</version>
+				<executions>
+					<execution>
+						<id>sign-artifacts</id>
+						<phase>verify</phase>
+						<goals>
+							<goal>sign</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+                <groupId>org.sonatype.plugins</groupId>
+                <artifactId>nexus-staging-maven-plugin</artifactId>
+                <version>1.6.7</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <serverId>ossrh</serverId>
+                    <nexusUrl>https://s01.oss.sonatype.org/</nexusUrl>
+                    <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                    <stagingProfileId>952745d70b68ca</stagingProfileId>
+                </configuration>
+            </plugin>
+            
+            
 		</plugins>
 	</build>
 
 	<dependencies>
-    	<dependency>
-            <groupId>org.locationtech.jts</groupId>
-            <artifactId>jts-core</artifactId>
-            <version>1.16.1</version>
-        </dependency>
-
+		<dependency>
+			<groupId>org.locationtech.jts</groupId>
+			<artifactId>jts-core</artifactId>
+			<version>1.16.1</version>
+		</dependency>
 	</dependencies>
+
 
 	<!-- =========================================================== -->
 	<!-- Repository -->
@@ -68,8 +151,6 @@
 	</repositories>
 
 
-
-
 	<!-- =========================================================== -->
 	<!-- Plugin Repositories -->
 	<!-- =========================================================== -->
@@ -83,28 +164,16 @@
 			</snapshots>
 		</pluginRepository>
 	</pluginRepositories>
-	
+
+
+
 	<!-- =========================================================== -->
-    <!-- Distribution Management -->
-    <!-- =========================================================== -->
+	<!-- Distribution Management -->
+	<!-- =========================================================== -->
+
 	
-	<licenses>
-        <license>
-            <name>CeCILL-C</name>
-            <url>http://www.cecill.info/</url>
-        </license>
-    </licenses>
 
-    <developers>
-        <developer>
-            <name>Yann Méneroux</name>
-        </developer>
-    </developers>
-
-    <scm>
-        <connection>scm:git:git://github.com/umrlastig/mapmatcher.git</connection>
-        <url>https://github.com/umrlastig/mapmatcher.git</url>
-    </scm>
+	
 
 	<distributionManagement>
 		<downloadUrl>http://sourceforge.net/projects/oxygene-project/files/</downloadUrl>
