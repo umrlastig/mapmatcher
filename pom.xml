@@ -110,18 +110,7 @@
 					</execution>
 				</executions>
 			</plugin>
-			<plugin>
-                <groupId>org.sonatype.plugins</groupId>
-                <artifactId>nexus-staging-maven-plugin</artifactId>
-                <version>1.6.7</version>
-                <extensions>true</extensions>
-                <configuration>
-                    <serverId>ossrh</serverId>
-                    <nexusUrl>https://s01.oss.sonatype.org/</nexusUrl>
-                    <autoReleaseAfterClose>true</autoReleaseAfterClose>
-                    <stagingProfileId>952745d70b68ca</stagingProfileId>
-                </configuration>
-            </plugin>
+			
             
             
 		</plugins>
@@ -171,10 +160,6 @@
 	<!-- Distribution Management -->
 	<!-- =========================================================== -->
 
-	
-
-	
-
 	<distributionManagement>
 		<downloadUrl>http://sourceforge.net/projects/oxygene-project/files/</downloadUrl>
 		<repository>
@@ -188,6 +173,29 @@
 			<url>https://s01.oss.sonatype.org/content/repositories/snapshots/</url>
 		</snapshotRepository>
 	</distributionManagement>
+	
+	
+	<profiles>
+	   <profile>
+            <id>ossrh</id>
+            <build>
+                <plugins>
+                    <plugin>
+		                <groupId>org.sonatype.plugins</groupId>
+		                <artifactId>nexus-staging-maven-plugin</artifactId>
+		                <version>1.6.7</version>
+		                <extensions>true</extensions>
+		                <configuration>
+		                    <serverId>ossrh</serverId>
+		                    <nexusUrl>https://s01.oss.sonatype.org/</nexusUrl>
+		                    <autoReleaseAfterClose>true</autoReleaseAfterClose>
+		                    <stagingProfileId>952745d70b68ca</stagingProfileId>
+		                </configuration>
+		            </plugin>
+                </plugins>
+            </build>
+	   </profile>
+	</profiles>
 
 
 </project>

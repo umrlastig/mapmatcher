@@ -5,6 +5,15 @@ Matching GPS traces with MapMatcher
 Le but de l’algorithme est de recaler des points d'observation sur un réseau. Un cas classique consiste à recaler des points GPS d'une voiture sur un réseau routier. L'algorithme prend en entrée un jeu de traces GPS et un réseau linéaire et fournit en sortie les points GPS recalés sur le réseau.
 
 
+[![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
+
+[![CircleCI](https://img.shields.io/circleci/project/github/umrlastig/mapmatcher/main.svg?style=flat-square&label=CircleCI)](https://circleci.com/gh/umrlastig/mapmatcher)
+
+[![Software License](https://img.shields.io/badge/Licence-Cecill--C-blue.svg?style=flat)](https://github.com/umrlastig/mapmatcher/blob/master/LICENSE)
+
+
+
+
 Installation
 --------------
 
