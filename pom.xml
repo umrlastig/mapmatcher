@@ -6,7 +6,7 @@
 
 	<groupId>fr.umr-lastig</groupId>
 	<artifactId>mapmatcher</artifactId>
-	<version>1.2</version>
+	<version>1.4</version>
 
 	<name>Map-matcher</name>
 	<description>Map-matching of a track on a network with Hidden Markov Model. Based on popular Newson and Krumm paper</description>
@@ -70,6 +70,40 @@
 					<target>1.8</target>
 				</configuration>
 			</plugin>
+			<!-- 
+			<plugin>
+			    <groupId>org.apache.maven.plugins</groupId>
+			    <artifactId>maven-dependency-plugin</artifactId>
+			    <executions>
+			        <execution>
+			            <id>copy-dependencies</id>
+			            <phase>prepare-package</phase>
+			            <goals>
+			                <goal>copy-dependencies</goal>
+			            </goals>
+			            <configuration>
+			                <outputDirectory>${project.build.directory}/lib</outputDirectory>
+			                <overWriteReleases>false</overWriteReleases>
+			                <overWriteSnapshots>false</overWriteSnapshots>
+			                <overWriteIfNewer>true</overWriteIfNewer>
+			            </configuration>
+			        </execution>
+			    </executions>
+			</plugin>
+			<plugin>
+			    <groupId>org.apache.maven.plugins</groupId>
+			    <artifactId>maven-jar-plugin</artifactId>
+			    <configuration>
+			        <archive>
+			            <manifest>
+			                <addClasspath>true</addClasspath>
+			                <classpathPrefix>lib/</classpathPrefix>
+			                <mainClass>theMainClass</mainClass>
+			            </manifest>
+			        </archive>
+			    </configuration>
+			</plugin>
+			 -->
 		</plugins>
 	</build>
 
