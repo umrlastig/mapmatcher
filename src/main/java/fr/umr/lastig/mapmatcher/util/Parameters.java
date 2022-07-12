@@ -115,7 +115,7 @@ public class Parameters {
 	public static boolean add_spatial_index = false;
 	public static boolean rmse_type_before = false;
 	public static boolean ref_to_network = false;
-	public static boolean index_format_csv = true;
+	public static boolean output_index_format_csv = true;
 	public static boolean network_inaccuracies = false;
 	public static boolean confidence_min_ratio = false;
 	
@@ -291,7 +291,7 @@ public class Parameters {
 			if (name.equals("output.index.coords"))	          {output_index_coords =  Boolean.parseBoolean(value);}
 			
 			if (name.equals("option.rmse.type"))			  {rmse_type_before = value.equals("before");}
-			if (name.equals("output.index.format"))			  {index_format_csv = value.equals("csv");}
+			if (name.equals("output.index.format.csv"))		  {output_index_format_csv = Boolean.parseBoolean(value);}
 			
 			if (name.equals("option.buffer.type"))		      {distance_buffer = value;}
 			
@@ -671,7 +671,7 @@ public class Parameters {
 			writer_param.write("output.index.all.edge = "+output_index_all_edge+"\r\n");
 			writer_param.write("output.index.coords = "+output_index_coords+"\r\n");
 			
-			if (index_format_csv){
+			if (output_index_format_csv){
 				
 				writer_param.write("output.index.format = csv\r\n");
 				
@@ -804,7 +804,7 @@ public class Parameters {
 		Parameters.output_clear = false;
 		Parameters.output_rmse = false;
 		Parameters.output_confidence = false;
-		Parameters.index_format_csv = true;
+		Parameters.output_index_format_csv = true;
 		Parameters.output_index_all_edge = false;
 		Parameters.output_index_coords = false;
 		Parameters.network_inaccuracies = false;

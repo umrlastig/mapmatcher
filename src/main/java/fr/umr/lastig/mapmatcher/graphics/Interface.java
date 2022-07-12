@@ -1800,7 +1800,7 @@ public class Interface {
 				Parameters.gui_report_path = textField_12.getText();
 				Parameters.gui_parameters_path = textField_6.getText();
 
-				Parameters.index_format_csv = rdbtnCsv.isSelected();
+				Parameters.output_index_format_csv = rdbtnCsv.isSelected();
 
 				Parameters.ref_to_network = chckbxRecordMapmatchedPoint.isSelected();
 
@@ -3266,8 +3266,8 @@ public class Interface {
 					textField_11.setText(Parameters.computation_beta+"");
 					textField_13.setText(Parameters.computation_angle+"");
 
-					rdbtnCsv.setSelected(Parameters.index_format_csv);
-					rdbtnXml.setSelected(!Parameters.index_format_csv);
+					rdbtnCsv.setSelected(Parameters.output_index_format_csv);
+					rdbtnXml.setSelected(!Parameters.output_index_format_csv);
 
 					rdbtnCsv.setEnabled(chckbxStoreMapmatchedPoints.isSelected());
 					rdbtnXml.setEnabled(chckbxStoreMapmatchedPoints.isSelected());

@@ -7,6 +7,7 @@
 	<groupId>fr.umr-lastig</groupId>
 	<artifactId>mapmatcher</artifactId>
 	<version>1.5-SNAPSHOT</version>
+	<packaging>jar</packaging>
 
 	<name>Map-matcher</name>
 	<description>Map-matching of a track on a network with Hidden Markov Model. Based on popular Newson and Krumm paper</description>
@@ -41,6 +42,8 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<maven.compiler.source>1.8</maven.compiler.source>
+        <mainClass>fr.umr.lastig.mapmatcher.core.Main</mainClass>
 	</properties>
 
 	<build>
@@ -166,8 +169,8 @@
 	</distributionManagement>
 	
 	
-	<profiles>
-	   <profile>
+    <profiles>
+        <profile>
             <id>ossrh</id>
             <build>
                 <plugins>
@@ -225,7 +228,38 @@
 		            </plugin>
                 </plugins>
             </build>
-	   </profile>
+        </profile>
+	   
+        <profile>
+            <id>jar-with-dependencies</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-assembly-plugin</artifactId>
+                        <configuration>
+                            <archive>
+                                <manifest>
+                                    <mainClass>${mainClass}</mainClass>
+                                </manifest>
+                            </archive>
+                            <descriptorRefs>
+                                <descriptorRef>jar-with-dependencies</descriptorRef>
+                            </descriptorRefs>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>single</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        
 	</profiles>
 
 

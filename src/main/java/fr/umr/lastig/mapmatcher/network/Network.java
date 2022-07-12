@@ -892,32 +892,26 @@ public class Network {
 
 	}
 
+	
 	// -----------------------------------------------------
 	// Method to print index
 	// -----------------------------------------------------
-	public void printIndex(String path){
-		
+	public void printIndex(String path) {
 		String delim2 = ";";
-		
-		if (Parameters.output_delimiter.equals(";")){
-			
+		if (Parameters.output_delimiter.equals(";")) {
 			delim2 = ",";
-			
 		}
 		
-		Main.gui.label_17.setText("Printing index...");
+		if (MapMatching.gui_mode) {
+			Main.gui.label_17.setText("Printing index...");
+		}
 
 		PrintWriter pw = null;
-
 		try {
-
 			pw = new PrintWriter(new BufferedWriter(new FileWriter(new File(path))));
-
 		} catch (IOException e) {
-
 			System.out.println("Error: cannot print index");
 			System.exit(19);
-
 		}
 		
 		StringBuilder output = new StringBuilder();
@@ -980,7 +974,9 @@ public class Network {
 		Tools.progressPercentage(SYSTEM_POINT.size(), SYSTEM_POINT.size(), MapMatching.gui_mode);
 
 		Tools.println("Index file "+path.replace("\\", "/")+" : ok");
-		Main.gui.label_17.setText("");
+		if (MapMatching.gui_mode){
+			Main.gui.label_17.setText("");
+		}
 
 	}
 
@@ -988,7 +984,7 @@ public class Network {
 	// -----------------------------------------------------
 	// Method to print index in xml format
 	// -----------------------------------------------------
-	public void printIndexInXml(String path){
+	public void printIndexInXml(String path) {
 
 		//Main.gui.label_17.setText("Printing index...");
 

@@ -33,31 +33,20 @@ public class Main {
 	public static Interface gui;
 	public static ImageIcon img = new ImageIcon("resources\\grenouille-couleur.jpg");
 
-	public static void main(String[] args){
-
-		// Remove arg
-		//args = new String[0];
-		
+	public static void main(String[] args) {
 		MapMatching.gui_mode = (args.length == 0);
-
 		if (MapMatching.gui_mode) {
-
 			executeInterface();
-
-		}else{
-
+		} else {
 			executeConsole(args[0]);
-
 		}
-
 	}
 
 
 	// ----------------------------------------------------------------------
 	// Execute method in a console user interface
 	// ----------------------------------------------------------------------
-	public static void executeConsole(String parameter_file){
-
+	public static void executeConsole (String parameter_file) {
 		long start = System.currentTimeMillis();
 
 		Parameters.load(parameter_file);

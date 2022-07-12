@@ -1,6 +1,5 @@
 package fr.umr.lastig.mapmatcher;
 
-import java.io.File;
 import java.util.ArrayList;
 
 import fr.umr.lastig.mapmatcher.core.MapMatching;
@@ -12,23 +11,20 @@ import fr.umr.lastig.mapmatcher.util.Parameters;
 public class AltituderandoMapMatcher {
 	
 	private static final String URL_NETWORK     = "./data/topo_l93_2d.csv"; // 
-    private static final String URL_SORTIE      = "./data/res";
-    private static final String URL_TRACES      = "./data/gps/";
+    private static final String URL_SORTIE      = "./data/res/";
+    private static final String URL_TRACE_r843  = "./data/r843.csv";
 	
-	public static void main(String[] args) {
-        
+    public static void main(String[] args) {
+    	
     	try {
-    		
-            setParameters();
+            
+    		setParameters();
             Loaders.parameterize();
             MapMatching.gui_mode = false;
-            
             
             // =============================================================================
             ArrayList<String> input_track_path_list = getTraces();
             Parameters.input_track_path_list = input_track_path_list;
-            // Parameters.input_track_path_list = new ArrayList<String>();
-            // Parameters.input_track_path_list.add("PATH_TRACK");
             System.out.println("Nb traces = " + input_track_path_list.size());
             
             MapMatching.parameterize();
@@ -55,24 +51,12 @@ public class AltituderandoMapMatcher {
 	
 	
 	/**
-	 * Chargement des traces
+	 * Chargement des traces.
 	 * @return
 	 */
 	public static ArrayList<String> getTraces() {
-        
 		ArrayList<String> listTrack = new ArrayList<String>();
-        
-		File folder = new File(URL_TRACES);
-        File[] listOfFiles = folder.listFiles();
-        // Boucle sur les fichiers
-        for (int i=0; i<listOfFiles.length; i++) {
-            String filename = listOfFiles[i].getAbsolutePath();
-            if (filename.substring(filename.length() - 3).equals("csv")) {
-            	// System.out.println(filename);
-            	listTrack.add(filename);
-            }
-        }
-		
+        listTrack.add(URL_TRACE_r843);
         return listTrack;
     }
 	
@@ -136,7 +120,7 @@ public class AltituderandoMapMatcher {
           
         Parameters.output_clear = false;
         Parameters.output_debug = false;
-        Parameters.output_parameters = false;
+        Parameters.output_parameters = true;
         Parameters.output_report = true;
         // Parameters.output_graphics = false;
           
@@ -155,6 +139,6 @@ public class AltituderandoMapMatcher {
         
         Parameters.output_path = URL_SORTIE;
         Parameters.add_spatial_index = true;
-        Parameters.index_format_csv = false;
+        Parameters.output_index_format_csv = false;
     }
 }

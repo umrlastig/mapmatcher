@@ -14,7 +14,7 @@ package fr.umr.lastig.mapmatcher.core;
 
 import fr.umr.lastig.mapmatcher.graphics.Interface;
 
-import java.awt.Desktop;
+// import java.awt.Desktop;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -482,36 +482,23 @@ public class MapMatching {
 		// ----------------------------------------------------------
 		// Print index (meta-data)
 		// ----------------------------------------------------------
-		if (Parameters.add_spatial_index){
-
-			if (Parameters.index_format_csv){
-
-				network.printIndex(Parameters.output_path+"\\"+"index.metadat");
-
+		if (Parameters.add_spatial_index) {
+			if (Parameters.output_index_format_csv){
+				network.printIndex(Parameters.output_path + "/" + "index.csv");
+			} else {
+				network.printIndexInXml(Parameters.output_path + "/" + "index.xml");
 			}
-			else{
-
-				network.printIndexInXml(Parameters.output_path+"\\"+"index.xml");
-
-			}
-
 		}
 
 		// ----------------------------------------------------------
 		// Print network file if modified
 		// ----------------------------------------------------------
-		if ((Parameters.make_topology) || (Parameters.remove_deg_2_nodes) || (Parameters.add_spatial_index)){
-
-			String p = Parameters.output_path+"\\"+"network_topo.wkt";
-
-			if (Parameters.project_coordinates){
-
+		if ((Parameters.make_topology) || (Parameters.remove_deg_2_nodes) || (Parameters.add_spatial_index)) {
+			String p = Parameters.output_path+"/"+"network_topo.wkt";
+			if (Parameters.project_coordinates) {
 				network.toWGS84();
-
 			}
-
 			network.printInFile(p);
-
 		}
 
 		// ----------------------------------------------------------
