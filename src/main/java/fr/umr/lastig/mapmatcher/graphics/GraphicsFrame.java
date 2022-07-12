@@ -500,7 +500,7 @@ public class GraphicsFrame extends JFrame {
 		setContentPane(g);
 		setLocationRelativeTo(null);
 		setTitle("Graphical output");
-		setIconImage(Main.img.getImage());
+		// setIconImage(Main.img.getImage());
 		setJMenuBar(menuBar);
 
 

@@ -75,7 +75,6 @@ import javax.swing.event.DocumentListener;
 import javax.swing.plaf.basic.BasicSliderUI;
 import javax.swing.JRadioButton;
 
-import fr.umr.lastig.mapmatcher.core.Main;
 import fr.umr.lastig.mapmatcher.core.MapMatching;
 import fr.umr.lastig.mapmatcher.util.Loaders;
 import fr.umr.lastig.mapmatcher.util.Parameters;
@@ -606,7 +605,7 @@ public class Interface {
 		frame.pack();
 		frame.setResizable(false);
 		frame.setLocationRelativeTo(null);
-		frame.setIconImage(Main.img.getImage());
+		// frame.setIconImage(Main.img.getImage());
 		frame.setTitle(title);
 
 
@@ -2167,7 +2166,7 @@ public class Interface {
 		JLabel label_21 = new JLabel("Mapmatcher v1.0");
 		label_21.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		label_21.setBounds(85, 80, 240, 240);
-		label_21.setIcon(Main.img);
+		// label_21.setIcon(Main.img);
 		panel_3.add(label_21);
 
 		final JButton btnHelp = new JButton("Help");
@@ -2262,7 +2261,7 @@ public class Interface {
 					@Override
 					protected JDialog createDialog( Component parent ) throws HeadlessException {
 						JDialog dialog = super.createDialog( parent );
-						dialog.setIconImage( Main.img.getImage());
+						// dialog.setIconImage( Main.img.getImage());
 						return dialog;
 					}
 
@@ -2407,7 +2406,7 @@ public class Interface {
 					@Override
 					protected JDialog createDialog( Component parent ) throws HeadlessException {
 						JDialog dialog = super.createDialog( parent );
-						dialog.setIconImage( Main.img.getImage() );
+						// dialog.setIconImage( Main.img.getImage() );
 						return dialog;
 					}
 
@@ -2503,7 +2502,7 @@ public class Interface {
 					@Override
 					protected JDialog createDialog( Component parent ) throws HeadlessException {
 						JDialog dialog = super.createDialog( parent );
-						dialog.setIconImage( Main.img.getImage() );
+						// dialog.setIconImage( Main.img.getImage() );
 						return dialog;
 					}
 
@@ -2648,7 +2647,7 @@ public class Interface {
 					@Override
 					protected JDialog createDialog( Component parent ) throws HeadlessException {
 						JDialog dialog = super.createDialog( parent );
-						dialog.setIconImage( Main.img.getImage() );
+						// dialog.setIconImage( Main.img.getImage() );
 						return dialog;
 					}
 
@@ -2687,7 +2686,7 @@ public class Interface {
 					@Override
 					protected JDialog createDialog( Component parent ) throws HeadlessException {
 						JDialog dialog = super.createDialog( parent );
-						dialog.setIconImage( Main.img.getImage() );
+						// dialog.setIconImage( Main.img.getImage() );
 						return dialog;
 					}
 
@@ -3172,7 +3171,7 @@ public class Interface {
 					@Override
 					protected JDialog createDialog( Component parent ) throws HeadlessException {
 						JDialog dialog = super.createDialog( parent );
-						dialog.setIconImage( Main.img.getImage() );
+						// dialog.setIconImage( Main.img.getImage() );
 						return dialog;
 					}
 
@@ -3181,7 +3180,7 @@ public class Interface {
 				filechooser.showOpenDialog(null);
 
 
-				if (filechooser.getSelectedFile() == null){
+				if (filechooser.getSelectedFile() == null) {
 
 					return;
 

@@ -15,7 +15,6 @@ package fr.umr.lastig.mapmatcher.core;
 
 import java.awt.EventQueue;
 
-import javax.swing.ImageIcon;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
@@ -31,7 +30,7 @@ import fr.umr.lastig.mapmatcher.util.Tools;
 public class Main {
 
 	public static Interface gui;
-	public static ImageIcon img = new ImageIcon("resources\\grenouille-couleur.jpg");
+	// public static ImageIcon img = new ImageIcon("grenouille-couleur.jpg");
 
 	public static void main(String[] args) {
 		MapMatching.gui_mode = (args.length == 0);
@@ -167,7 +166,7 @@ public class Main {
 					gui.frmMapMatcher.setVisible(true);
 
 
-					gui.frmMapMatcher.setIconImage(img.getImage());
+					// gui.frmMapMatcher.setIconImage(img.getImage());
 
 				} catch (Exception e) {
 					e.printStackTrace();
