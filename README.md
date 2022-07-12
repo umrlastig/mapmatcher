@@ -16,6 +16,8 @@ Le but de l’algorithme est de recaler des points d'observation sur un réseau.
 Installation
 --------------
 
+<!--
+
 #### Option 1: 
 
 Download mapmatcher jar file at:
@@ -42,3 +44,5 @@ Insert the following lines in your Maven pom.xml:
 	<url>https://forge-cogit.ign.fr/nexus/content/repositories/snapshots/</url>
 </repository>
 ```
+
+-->
