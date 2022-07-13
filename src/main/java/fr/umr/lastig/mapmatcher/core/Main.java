@@ -30,21 +30,26 @@ import fr.umr.lastig.mapmatcher.util.Tools;
 public class Main {
 
 	public static Interface gui;
-	// public static ImageIcon img = new ImageIcon("grenouille-couleur.jpg");
 
 	public static void main(String[] args) {
-		MapMatching.gui_mode = (args.length == 0);
+		
+		/*MapMatching.gui_mode = (args.length == 0);
+		
 		if (MapMatching.gui_mode) {
 			executeInterface();
-		} else {
+		} else if (args.length > 1) {*/
+			Reconstruction.execute(args);
+		/*} else {
 			executeConsole(args[0]);
-		}
+		}*/
 	}
 
 
-	// ----------------------------------------------------------------------
-	// Execute method in a console user interface
-	// ----------------------------------------------------------------------
+	/**
+	 * Execute method in a console user interface.
+	 * 
+	 * @param parameter_file
+	 */
 	public static void executeConsole (String parameter_file) {
 		long start = System.currentTimeMillis();
 
@@ -100,10 +105,8 @@ public class Main {
 		Tools.println("ok");
 
 		// Mercator projection
-		if (Parameters.project_coordinates){
-
+		if (Parameters.project_coordinates) {
 			network.toLocalMercator();
-
 		}
 
 
@@ -118,56 +121,40 @@ public class Main {
 	}
 
 
-	// ----------------------------------------------------------------------
-	// Execute method in a graphic user interface
-	// ----------------------------------------------------------------------
-	public static void executeInterface(){
+	/**
+	 * Execute method in a graphic user interface.
+	 * 
+	 */
+	public static void executeInterface() {
 
 		try {
 
 			String os = System.getProperty("os.name").toLowerCase();
 
 			// For windows os
-			if (os.contains("windows")){
-
+			if (os.contains("windows")) {
 				UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
-
 			}
-
 			// For linux os
-			if ((os.contains("linux")) || (os.contains("unix"))){
-
-				//UIManager.setLookAndFeel("com.sun.java.swing.plaf.gtk.GTKLookAndFeel");
-
+			if ((os.contains("linux")) || (os.contains("unix"))) {
+				// UIManager.setLookAndFeel("com.sun.java.swing.plaf.gtk.GTKLookAndFeel");
 			}
 
-
-		}
-		catch (UnsupportedLookAndFeelException e) {
+		} catch (UnsupportedLookAndFeelException e) {
 			// handle exception
-		}
-		catch (ClassNotFoundException e) {
+		} catch (ClassNotFoundException e) {
 			// handle exception
-		}
-		catch (InstantiationException e) {
+		} catch (InstantiationException e) {
 			// handle exception
-		}
-		catch (IllegalAccessException e) {
+		} catch (IllegalAccessException e) {
 			// handle exception
 		}
 
 		EventQueue.invokeLater(new Runnable() {
-
 			public void run() {
-
 				try {
-
 					gui = new Interface();
 					gui.frmMapMatcher.setVisible(true);
-
-
-					// gui.frmMapMatcher.setIconImage(img.getImage());
-
 				} catch (Exception e) {
 					e.printStackTrace();
 				}

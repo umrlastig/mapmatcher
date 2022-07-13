@@ -154,6 +154,29 @@ public class Loaders {
 		EXCLUDED_Y = new ArrayList<String>();
 
 	}
+	
+	public static void parameterize2(){
+
+		Loaders.columns_delimiter_network = ",";
+
+
+		Loaders.geom_column_name = "wkt";
+		Loaders.source_column_name = "source";
+		Loaders.target_column_name =  "target";
+		Loaders.edge_column_name = "link_id";
+		
+		Loaders.network_header = true;
+		
+		// Initialization
+
+		excluded_points_number = 0;
+
+		EXCLUDED_I = new ArrayList<Integer>();
+		EXCLUDED_T = new ArrayList<String>();
+		EXCLUDED_X = new ArrayList<String>();
+		EXCLUDED_Y = new ArrayList<String>();
+
+	}
 
 	// ----------------------------------------------
 	// Add buffer to loaders
